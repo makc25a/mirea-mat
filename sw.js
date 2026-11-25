@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mirea-mat-v1';
+const CACHE_NAME = 'mirea-mat-v2';
 const ASSETS = [
   './',
   './index.html',
