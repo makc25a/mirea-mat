@@ -1,0 +1,26 @@
+{
+  "name": "МИРЭА·КОД·МАТ — Шпаргалка и тренажёр",
+  "short_name": "МИРЭА·МАТ",
+  "description": "Шпаргалка, карточки, тренажёр и письменная тетрадь: 8–11 класс, ВиС, ОГЭ, 1 курс МИРЭА и Кодинг",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,2722 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#020617" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="МИРЭА·МАТ" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+
+  <title>МИРЭА·КОД·МАТ — Шпаргалка и тренажёр (8–11 класс, ОГЭ, 1 курс МИРЭА, Кодинг)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
+    .math-formula {
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.01em;
+    }
+    .code-block {
+      font-family: 'JetBrains Mono', monospace;
+      tab-size: 4;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .flip-perspective { perspective: 1200px; }
+    .flip-inner {
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-style: preserve-3d;
+    }
+    .flip-inner.is-flipped { transform: rotateY(180deg); }
+    .flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .flip-back { transform: rotateY(180deg); }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.35); border-radius: 9999px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen transition-colors duration-200">
+  <!-- Top Navbar -->
+  <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-indigo-500/20 shrink-0">
+          ∑λ
+        </div>
+        <div class="min-w-0">
+          <div class="font-extrabold text-base sm:text-lg tracking-tight truncate">МИРЭА·КОД·МАТ</div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400 truncate hidden sm:block">8 кл • ВиС • 9 ОГЭ • 10–11 • МИРЭА • Кодинг</div>
+        </div>
+      </div>
+
+      <!-- Mode Tabs (Desktop) -->
+      <nav id="desktop-nav" class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
+        <button data-mode="cheatsheet" class="mode-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5">
+          <i data-lucide="book-open" class="w-4 h-4"></i> Шпаргалка
+        </button>
+        <button data-mode="flashcards" class="mode-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5">
+          <i data-lucide="layers" class="w-4 h-4"></i> Карточки
+        </button>
+        <button data-mode="quiz" class="mode-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5">
+          <i data-lucide="brain-circuit" class="w-4 h-4"></i> Тренажёр
+        </button>
+        <button data-mode="written" class="mode-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5">
+          <i data-lucide="pen-line" class="w-4 h-4"></i> Письменно
+        </button>
+        <button data-mode="tools" class="mode-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5">
+          <i data-lucide="calculator" class="w-4 h-4"></i> Инструменты
+        </button>
+      </nav>
+
+      <!-- Right Controls -->
+      <div class="flex items-center gap-2 shrink-0">
+        <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-xs font-bold" title="Опыт за изучение и тесты">
+          <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+          <span id="header-xp">0 XP</span>
+        </div>
+        <button id="theme-toggle" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors" aria-label="Сменить тему" title="Сменить тему">
+          <i id="theme-icon" data-lucide="sun" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mode Tabs (Mobile) -->
+    <div class="md:hidden border-t border-slate-200 dark:border-slate-800 px-2 py-1.5 flex items-center justify-around gap-1 bg-white dark:bg-slate-950">
+      <button data-mode="cheatsheet" class="mode-btn flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex flex-col items-center gap-0.5 transition-all">
+        <i data-lucide="book-open" class="w-4 h-4"></i><span>Шпаргалка</span>
+      </button>
+      <button data-mode="flashcards" class="mode-btn flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex flex-col items-center gap-0.5 transition-all">
+        <i data-lucide="layers" class="w-4 h-4"></i><span>Карточки</span>
+      </button>
+      <button data-mode="quiz" class="mode-btn flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex flex-col items-center gap-0.5 transition-all">
+        <i data-lucide="brain-circuit" class="w-4 h-4"></i><span>Тренажёр</span>
+      </button>
+      <button data-mode="written" class="mode-btn flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex flex-col items-center gap-0.5 transition-all">
+        <i data-lucide="pen-line" class="w-4 h-4"></i><span>Письменно</span>
+      </button>
+      <button data-mode="tools" class="mode-btn flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex flex-col items-center gap-0.5 transition-all">
+        <i data-lucide="calculator" class="w-4 h-4"></i><span>Инструменты</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <!-- Progress Overview Banner -->
+    <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+      <button data-track-card="grade8" class="track-stat-card text-left p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 hover:border-amber-500/60 transition-all shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> 8 класс (База)
+          </span>
+          <span id="stat-grade8-text" class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">0/4</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+          <div id="stat-grade8-bar" class="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </button>
+
+      <button data-track-card="vis" class="track-stat-card text-left p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 hover:border-violet-500/60 transition-all shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">
+            <span class="w-2 h-2 rounded-full bg-violet-500"></span> ВиС (8–11 кл)
+          </span>
+          <span id="stat-vis-text" class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">0/3</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+          <div id="stat-vis-bar" class="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </button>
+
+      <button data-track-card="oge9" class="track-stat-card text-left p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 hover:border-rose-500/60 transition-all shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span> 9 кл • ОГЭ (Физ/Инф)
+          </span>
+          <span id="stat-oge9-text" class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">0/5</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+          <div id="stat-oge9-bar" class="h-full bg-gradient-to-r from-rose-500 to-pink-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </button>
+
+      <button data-track-card="ege" class="track-stat-card text-left p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 hover:border-indigo-500/60 transition-all shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            <span class="w-2 h-2 rounded-full bg-indigo-500"></span> 10–11 Профиль (ЕГЭ)
+          </span>
+          <span id="stat-ege-text" class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">0/6</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+          <div id="stat-ege-bar" class="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </button>
+
+      <button data-track-card="mirea" class="track-stat-card text-left p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 hover:border-cyan-500/60 transition-all shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+            <span class="w-2 h-2 rounded-full bg-cyan-500"></span> 1 курс МИРЭА (Вышмат)
+          </span>
+          <span id="stat-mirea-text" class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">0/6</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+          <div id="stat-mirea-bar" class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </button>
+
+      <button data-track-card="coding" class="track-stat-card text-left p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 hover:border-emerald-500/60 transition-all shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Кодинг (Python • C++ • Алго)
+          </span>
+          <span id="stat-coding-text" class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">0/6</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+          <div id="stat-coding-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </button>
+    </section>
+
+    <!-- VIEW 1: CHEAT SHEET -->
+    <section id="view-cheatsheet" class="space-y-5">
+      <!-- Filters & Search -->
+      <div class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between bg-white dark:bg-slate-900/80 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button data-filter="all" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">Все темы</button>
+          <button data-filter="grade8" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">8 класс</button>
+          <button data-filter="vis" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">ВиС 8–11</button>
+          <button data-filter="oge9" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">9 кл • ОГЭ</button>
+          <button data-filter="ege" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">10–11 Профиль</button>
+          <button data-filter="mirea" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">1 курс МИРЭА</button>
+          <button data-filter="coding" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">Кодинг</button>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 lg:max-w-lg">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <input id="search-input" type="text" placeholder="Поиск: дискриминант, D/4, закон Ома, матрица, BFS..." class="w-full pl-9 pr-8 py-2 rounded-xl text-sm bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" />
+            <button id="clear-search" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" aria-label="Очистить поиск">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button id="filter-bookmarks" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+              <i data-lucide="bookmark" class="w-3.5 h-3.5"></i> Избранное
+            </button>
+            <button id="filter-unstudied" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+              <i data-lucide="circle-dashed" class="w-3.5 h-3.5"></i> Неизученные
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards Grid -->
+      <div id="cheatsheet-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
+
+      <!-- Empty State -->
+      <div id="cheatsheet-empty" class="hidden text-center py-14 px-4 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-white/50 dark:bg-slate-900/40">
+        <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 text-slate-400">
+          <i data-lucide="search-x" class="w-6 h-6"></i>
+        </div>
+        <h3 class="font-bold text-base mb-1">Ничего не нашлось</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Попробуй изменить поисковый запрос или сбросить фильтры.</p>
+        <button id="reset-filters-btn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-colors">Сбросить фильтры</button>
+      </div>
+    </section>
+
+    <!-- VIEW 2: FLASHCARDS -->
+    <section id="view-flashcards" class="hidden space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900/80 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button data-fc-filter="all" class="fc-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">Все (38)</button>
+          <button data-fc-filter="grade8" class="fc-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">8 класс</button>
+          <button data-fc-filter="vis" class="fc-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">ВиС 8–11</button>
+          <button data-fc-filter="oge9" class="fc-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">9 кл • ОГЭ</button>
+          <button data-fc-filter="ege" class="fc-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">10–11 Профиль</button>
+          <button data-fc-filter="mirea" class="fc-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">1 курс МИРЭА</button>
+          <button data-fc-filter="coding" class="fc-filter-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">Кодинг</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="fc-counter" class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800">1 / 24</span>
+          <button id="fc-shuffle" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-1.5">
+            <i data-lucide="shuffle" class="w-3.5 h-3.5"></i> Перемешать
+          </button>
+        </div>
+      </div>
+
+      <div class="max-w-2xl mx-auto space-y-4">
+        <div id="fc-card-wrapper" class="flip-perspective cursor-pointer select-none" role="button" tabindex="0" aria-label="Перевернуть карточку">
+          <div id="fc-inner" class="flip-inner relative w-full min-h-[290px] sm:min-h-[320px]">
+            <!-- Front -->
+            <div class="flip-face absolute inset-0 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 flex flex-col justify-between shadow-lg">
+              <div class="flex items-center justify-between gap-2">
+                <span id="fc-badge" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">10–11 Профиль</span>
+                <span id="fc-known-pill" class="hidden text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">Выучено ✓</span>
+              </div>
+              <div class="my-auto py-4 text-center">
+                <div class="text-xs uppercase tracking-widest text-slate-400 mb-2 font-semibold">Вопрос / Формула</div>
+                <div id="fc-front" class="text-xl sm:text-2xl font-bold leading-snug"></div>
+              </div>
+              <div class="text-center text-xs text-slate-400 flex items-center justify-center gap-1.5">
+                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Нажми на карточку или Пробел, чтобы увидеть ответ
+              </div>
+            </div>
+
+            <!-- Back -->
+            <div class="flip-face flip-back absolute inset-0 rounded-3xl border-2 border-indigo-500/40 bg-gradient-to-br from-slate-50 to-indigo-50/50 dark:from-slate-900 dark:to-indigo-950/40 p-6 sm:p-8 flex flex-col justify-between shadow-lg">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Ответ и пояснение</span>
+                <span id="fc-subtag" class="text-xs font-mono text-slate-500 dark:text-slate-400"></span>
+              </div>
+              <div class="my-auto py-3 text-center space-y-3">
+                <div id="fc-back-main" class="math-formula text-lg sm:text-xl font-bold text-slate-900 dark:text-white bg-white/80 dark:bg-slate-950/70 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 inline-block max-w-full overflow-x-auto"></div>
+                <p id="fc-back-note" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-lg mx-auto"></p>
+              </div>
+              <div class="text-center text-xs text-slate-400">Нажми ещё раз, чтобы вернуть вопрос</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard Controls -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <button id="fc-prev" class="py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Назад
+          </button>
+          <button id="fc-again" class="py-2.5 px-4 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors">
+            <i data-lucide="refresh-ccw" class="w-4 h-4"></i> Повторить
+          </button>
+          <button id="fc-know" class="py-2.5 px-4 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors">
+            <i data-lucide="check" class="w-4 h-4"></i> Знаю!
+          </button>
+          <button id="fc-next" class="py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors">
+            Дальше <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: QUIZ / TRAINER -->
+    <section id="view-quiz" class="hidden space-y-5">
+      <div class="max-w-3xl mx-auto space-y-4">
+        <!-- Quiz Setup / Header -->
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button data-quiz-track="all" class="quiz-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">Микс</button>
+            <button data-quiz-track="grade8" class="quiz-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">8 класс</button>
+            <button data-quiz-track="vis" class="quiz-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">ВиС 8–11</button>
+            <button data-quiz-track="oge9" class="quiz-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">9 кл • ОГЭ</button>
+            <button data-quiz-track="ege" class="quiz-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">10–11 Профиль</button>
+            <button data-quiz-track="mirea" class="quiz-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">1 курс МИРЭА</button>
+            <button data-quiz-track="coding" class="quiz-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">Кодинг</button>
+          </div>
+          <div class="flex items-center gap-3 text-xs font-bold">
+            <span class="px-2.5 py-1 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400" id="quiz-progress-label">Вопрос 1 / 6</span>
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400" id="quiz-score-label">Счёт: 0</span>
+          </div>
+        </div>
+
+        <!-- Quiz Active Card -->
+        <div id="quiz-card" class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-sm space-y-5">
+          <div class="flex items-center justify-between gap-2">
+            <span id="quiz-topic-badge" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400"></span>
+            <span id="quiz-streak-badge" class="text-xs font-semibold text-amber-500 hidden">🔥 Серия: 0</span>
+          </div>
+
+          <h2 id="quiz-question" class="text-lg sm:text-xl font-bold leading-snug"></h2>
+          <pre id="quiz-code" class="hidden code-block text-xs sm:text-sm p-4 rounded-2xl bg-slate-900 text-slate-100 border border-slate-800"></pre>
+
+          <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+          <div id="quiz-feedback" class="hidden p-4 rounded-2xl text-sm leading-relaxed border"></div>
+
+          <div class="flex items-center justify-between pt-2">
+            <button id="quiz-restart-inline" class="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">Начать заново</button>
+            <button id="quiz-next-btn" class="hidden px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-colors flex items-center gap-1.5">
+              Следующий вопрос <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Results -->
+        <div id="quiz-result" class="hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 text-center space-y-4 shadow-sm">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-emerald-500 text-white flex items-center justify-center mx-auto text-2xl font-extrabold shadow-lg" id="quiz-result-percent">100%</div>
+          <h3 class="text-2xl font-extrabold" id="quiz-result-title">Отличный результат!</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto" id="quiz-result-desc"></p>
+          <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button id="quiz-retry-btn" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-colors">Пройти ещё раз</button>
+            <button id="quiz-retry-mistakes-btn" class="hidden px-5 py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-sm font-semibold transition-colors">Разобрать ошибки</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: WRITTEN PRACTICE (ПИСЬМЕННОЕ РЕШЕНИЕ И ОБЪЯСНЕНИЕ) -->
+    <section id="view-written" class="hidden space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900/80 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button data-wr-track="all" class="wr-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">Все задачи</button>
+          <button data-wr-track="grade8" class="wr-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">8 класс</button>
+          <button data-wr-track="vis" class="wr-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">ВиС 8–11</button>
+          <button data-wr-track="oge9" class="wr-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">9 кл • ОГЭ</button>
+          <button data-wr-track="ege" class="wr-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">10–11 Профиль</button>
+          <button data-wr-track="mirea" class="wr-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">1 курс МИРЭА</button>
+          <button data-wr-track="coding" class="wr-track-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all">Кодинг</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="wr-counter" class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800">1 / 9</span>
+          <button id="wr-prev" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Предыдущая задача">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          </button>
+          <button id="wr-next" class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Следующая задача">
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <!-- Left/Main: Question + Writing Pad -->
+        <div class="lg:col-span-8 space-y-4">
+          <!-- Question Card -->
+          <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6 space-y-3 shadow-sm">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span id="wr-badge" class="text-xs font-bold px-2.5 py-1 rounded-lg border"></span>
+                <span id="wr-solved-pill" class="hidden text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">Решено в тетради ✓</span>
+              </div>
+              <button id="wr-hint-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/15 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 transition-colors flex items-center gap-1.5">
+                <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Подсказка
+              </button>
+            </div>
+            <h2 id="wr-question" class="text-lg sm:text-xl font-extrabold leading-snug"></h2>
+            <div id="wr-hint-box" class="hidden p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-xs sm:text-sm text-amber-800 dark:text-amber-200 leading-relaxed"></div>
+          </div>
+
+          <!-- Written Solution & Explanation Card -->
+          <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6 space-y-4 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Твоя письменная работа</span>
+              <div class="flex flex-wrap items-center gap-1" id="wr-symbols">
+                <button type="button" data-sym="²" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">²</button>
+                <button type="button" data-sym="√(" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">√</button>
+                <button type="button" data-sym="±" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">±</button>
+                <button type="button" data-sym="·" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">·</button>
+                <button type="button" data-sym="⇒" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">⇒</button>
+                <button type="button" data-sym="≠" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">≠</button>
+                <button type="button" data-sym="≤" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">≤</button>
+                <button type="button" data-sym="≥" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">≥</button>
+                <button type="button" data-sym="π" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">π</button>
+                <button type="button" data-sym="∩" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">∩</button>
+                <button type="button" data-sym="∪" class="wr-sym-btn px-2 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20">∪</button>
+              </div>
+            </div>
+
+            <div>
+              <label for="wr-steps" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">1. Ход решения (формулы, подстановки, шаги):</label>
+              <textarea id="wr-steps" rows="4" placeholder="Например: b = -14 чётное ⇒ k = -7. D₁ = (-7)² - 3·8 = 49 - 24 = 25..." class="w-full p-3.5 rounded-2xl font-mono text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-indigo-500 focus:outline-none leading-relaxed"></textarea>
+            </div>
+
+            <div>
+              <label for="wr-answer" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">2. Твой ответ:</label>
+              <input id="wr-answer" type="text" placeholder="Впиши итоговый ответ (например: 4; 2/3 или 0.25)" class="w-full px-3.5 py-2.5 rounded-xl font-mono font-bold text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+            </div>
+
+            <div>
+              <label for="wr-explain" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">3. Объясни своими словами (почему именно так — лучший способ запомнить!):</label>
+              <textarea id="wr-explain" rows="3" placeholder="Например: Использовал 2-ю формулу D/4, потому что b чётное — так не нужно умножать на 4 и делить на 2a..." class="w-full p-3.5 rounded-2xl text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-indigo-500 focus:outline-none leading-relaxed"></textarea>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2.5 pt-1">
+              <button id="wr-check-btn" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-colors flex items-center gap-1.5">
+                <i data-lucide="check-check" class="w-4 h-4"></i> Проверить и открыть эталон
+              </button>
+              <button id="wr-save-btn" class="px-4 py-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-sm font-semibold transition-colors flex items-center gap-1.5">
+                <i data-lucide="save" class="w-4 h-4"></i> Сохранить в тетрадь
+              </button>
+              <button id="wr-clear-btn" class="px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs sm:text-sm font-semibold transition-colors">
+                Очистить
+              </button>
+            </div>
+          </div>
+
+          <!-- Reference Solution Reveal -->
+          <div id="wr-result-box" class="hidden rounded-3xl border p-5 sm:p-6 space-y-3 shadow-sm">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <div id="wr-check-status" class="font-extrabold text-base"></div>
+              <button id="wr-mark-done" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors flex items-center gap-1.5">
+                <i data-lucide="award" class="w-3.5 h-3.5"></i> Разобрался (+25 XP)
+              </button>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <div class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Эталонное решение:</div>
+              <div id="wr-ref-solution" class="font-mono text-xs sm:text-sm whitespace-pre-wrap leading-relaxed text-slate-800 dark:text-slate-100"></div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Эталонный ответ и объяснение:</div>
+              <div id="wr-ref-answer" class="font-mono font-bold text-sm text-emerald-700 dark:text-emerald-300"></div>
+              <p id="wr-ref-explain" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Sidebar: Saved Notebook Entries -->
+        <aside class="lg:col-span-4 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-3 shadow-sm">
+          <div class="flex items-center justify-between">
+            <h3 class="font-extrabold text-sm flex items-center gap-2">
+              <i data-lucide="notebook-pen" class="w-4 h-4 text-indigo-500"></i> Моя тетрадь
+            </h3>
+            <span id="wr-saved-count" class="text-xs font-mono font-bold px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800">0</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Здесь сохраняются твои письменные решения и объяснения. Кликни на задачу, чтобы открыть свою запись и повторить.
+          </p>
+          <div id="wr-notebook-list" class="space-y-2 max-h-[420px] overflow-y-auto scrollbar-thin pr-1"></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- VIEW 4: INTERACTIVE TOOLS -->
+    <section id="view-tools" class="hidden space-y-6">
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <!-- Tool 0: Quadratic Solver (8 класс: D, 2-я формула D/4 и Виета) -->
+        <div class="xl:col-span-2 rounded-3xl border border-amber-500/30 dark:border-amber-500/25 bg-white dark:bg-slate-900 p-5 sm:p-6 space-y-4 shadow-sm">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">8 класс • Квадратные уравнения</span>
+              <h2 class="text-lg font-extrabold mt-0.5">Решатель: обычный D, 2-я формула (D/4) и Виета</h2>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button data-quad="3,-14,8" class="quad-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-amber-500/15 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 transition-colors">3x²−14x+8 (D/4)</button>
+              <button data-quad="1,-5,6" class="quad-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-amber-500/20 transition-colors">x²−5x+6 (Виета)</button>
+              <button data-quad="5,-7,2" class="quad-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-amber-500/20 transition-colors">5x²−7x+2 (a+b+c=0)</button>
+              <button data-quad="1,6,9" class="quad-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-amber-500/20 transition-colors">x²+6x+9 (D=0)</button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+            <input id="quad-a" type="number" step="any" value="3" class="w-20 text-center font-mono font-bold py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-amber-500 focus:outline-none" />
+            <span class="font-mono font-bold text-sm">x² +</span>
+            <input id="quad-b" type="number" step="any" value="-14" class="w-20 text-center font-mono font-bold py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-amber-500 focus:outline-none" />
+            <span class="font-mono font-bold text-sm">x +</span>
+            <input id="quad-c" type="number" step="any" value="8" class="w-20 text-center font-mono font-bold py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-amber-500 focus:outline-none" />
+            <span class="font-mono font-bold text-sm">= 0</span>
+            <div id="quad-roots-badge" class="sm:ml-auto px-3.5 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 font-mono font-extrabold text-sm text-emerald-700 dark:text-emerald-300">x₁ = 4, x₂ = 0.6667</div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-1">
+              <div class="text-xs font-bold text-amber-700 dark:text-amber-300">⚡ 2-я формула (чётный b = 2k)</div>
+              <div id="quad-d4-out" class="font-mono text-xs text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap"></div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div class="text-xs font-bold text-slate-500 dark:text-slate-400">Обычный дискриминант (D)</div>
+              <div id="quad-d-out" class="font-mono text-xs text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap"></div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400">Виета и быстрый лайфхак</div>
+              <div id="quad-vieta-out" class="font-mono text-xs text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tool 1: Matrix 3x3 Calculator (MIREA) -->
+        <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6 space-y-4 shadow-sm">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">1 курс МИРЭА • Линейная алгебра</span>
+              <h2 class="text-lg font-extrabold mt-0.5">Калькулятор матрицы 3×3</h2>
+            </div>
+            <div class="flex gap-1.5">
+              <button id="mat-random" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Случайная</button>
+              <button id="mat-identity" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Единичная</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 max-w-xs mx-auto py-2" id="matrix-inputs">
+            <input type="number" value="2" class="mat-cell w-full text-center font-mono font-bold py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 focus:outline-none" />
+            <input type="number" value="1" class="mat-cell w-full text-center font-mono font-bold py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 focus:outline-none" />
+            <input type="number" value="3" class="mat-cell w-full text-center font-mono font-bold py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 focus:outline-none" />
+            <input type="number" value="0" class="mat-cell w-full text-center font-mono font-bold py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 focus:outline-none" />
+            <input type="number" value="4" class="mat-cell w-full text-center font-mono font-bold py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 focus:outline-none" />
+            <input type="number" value="-1" class="mat-cell w-full text-center font-mono font-bold py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 focus:outline-none" />
+            <input type="number" value="5" class="mat-cell w-full text-center font-mono font-bold py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 focus:outline-none" />
+            <input type="number" value="2" class="mat-cell w-full text-center font-mono font-bold py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 focus:outline-none" />
+            <input type="number" value="1" class="mat-cell w-full text-center font-mono font-bold py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 focus:outline-none" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <div class="text-xs text-slate-500 dark:text-slate-400">Определитель det(A)</div>
+              <div id="mat-det" class="text-2xl font-mono font-extrabold text-cyan-600 dark:text-cyan-400 mt-0.5">—</div>
+              <div id="mat-invertible" class="text-[11px] text-slate-500 mt-0.5"></div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <div class="text-xs text-slate-500 dark:text-slate-400">След матрицы tr(A)</div>
+              <div id="mat-trace" class="text-2xl font-mono font-extrabold text-indigo-600 dark:text-indigo-400 mt-0.5">—</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Сумма главной диагонали</div>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+            <div class="text-xs font-bold text-slate-500 dark:text-slate-400">Пошагово (правило Саррюса):</div>
+            <div id="mat-steps" class="text-xs font-mono text-slate-700 dark:text-slate-300 leading-relaxed break-words"></div>
+          </div>
+        </div>
+
+        <!-- Tool 2: Numeral Systems Converter (Coding & EGE) -->
+        <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6 space-y-4 shadow-sm">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Кодинг и ЕГЭ • Системы счисления</span>
+            <h2 class="text-lg font-extrabold mt-0.5">Конвертер систем счисления (2–36)</h2>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="sm:col-span-2">
+              <label for="base-input" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Число</label>
+              <input id="base-input" type="text" value="2026" class="w-full px-3.5 py-2.5 rounded-xl font-mono font-bold text-sm bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none uppercase" />
+            </div>
+            <div>
+              <label for="base-from" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Из системы (СС)</label>
+              <input id="base-from" type="number" min="2" max="36" value="10" class="w-full px-3.5 py-2.5 rounded-xl font-mono font-bold text-sm bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <div class="text-[11px] text-slate-500">Двоичная (BIN, 2)</div>
+              <div id="base-bin" class="font-mono font-bold text-sm text-emerald-600 dark:text-emerald-400 mt-0.5 break-all">—</div>
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <div class="text-[11px] text-slate-500">Восьмеричная (OCT, 8)</div>
+              <div id="base-oct" class="font-mono font-bold text-sm text-indigo-600 dark:text-indigo-400 mt-0.5 break-all">—</div>
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <div class="text-[11px] text-slate-500">Десятичная (DEC, 10)</div>
+              <div id="base-dec" class="font-mono font-bold text-sm text-slate-800 dark:text-slate-100 mt-0.5 break-all">—</div>
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <div class="text-[11px] text-slate-500">Шестнадцатеричная (HEX, 16)</div>
+              <div id="base-hex" class="font-mono font-bold text-sm text-violet-600 dark:text-violet-400 mt-0.5 break-all">—</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-28 shrink-0">
+              <label for="base-custom" class="block text-[11px] font-semibold text-slate-500 mb-1">Своя СС (2–36)</label>
+              <input id="base-custom" type="number" min="2" max="36" value="7" class="w-full px-3 py-2 rounded-xl font-mono font-bold text-sm bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+            </div>
+            <div class="flex-1 p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/25">
+              <div class="text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold">Результат + сумма цифр (часто в ЕГЭ №14):</div>
+              <div id="base-custom-out" class="font-mono font-bold text-sm text-emerald-700 dark:text-emerald-300 mt-0.5 break-all">—</div>
+            </div>
+          </div>
+          <div id="base-error" class="hidden text-xs font-semibold text-rose-500"></div>
+        </div>
+
+        <!-- Tool 3: Function & Derivative Grapher -->
+        <div class="xl:col-span-2 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6 space-y-4 shadow-sm">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">10–11 Профиль и Матанализ</span>
+              <h2 class="text-lg font-extrabold mt-0.5">График функции f(x) и её производной f'(x)</h2>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button data-preset="Math.sin(x)" class="graph-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20 transition-colors">sin(x)</button>
+              <button data-preset="x*x - 3" class="graph-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20 transition-colors">x² - 3</button>
+              <button data-preset="x*x*x - 3*x" class="graph-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20 transition-colors">x³ - 3x</button>
+              <button data-preset="Math.log(x)" class="graph-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20 transition-colors">ln(x)</button>
+              <button data-preset="Math.exp(x)" class="graph-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20 transition-colors">eˣ</button>
+              <button data-preset="1/x" class="graph-preset px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/20 transition-colors">1/x</button>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div class="flex-1 flex items-center gap-2">
+              <span class="font-mono text-sm font-bold text-indigo-500 shrink-0">f(x) =</span>
+              <input id="graph-expr" type="text" value="x*x*x - 3*x" class="w-full px-3.5 py-2 rounded-xl font-mono text-sm bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+            </div>
+            <label class="inline-flex items-center gap-2 text-xs font-semibold cursor-pointer select-none px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800">
+              <input id="graph-show-deriv" type="checkbox" checked class="rounded text-indigo-600 focus:ring-indigo-500" />
+              <span>Показать f'(x) (пунктир)</span>
+            </label>
+            <div class="flex items-center gap-2 text-xs font-semibold">
+              <span class="text-slate-500">Масштаб:</span>
+              <input id="graph-scale" type="range" min="25" max="100" value="48" class="w-24 accent-indigo-500" />
+            </div>
+          </div>
+
+          <div class="relative w-full h-72 sm:h-80 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+            <canvas id="graph-canvas" class="w-full h-full block"></canvas>
+            <div id="graph-error" class="hidden absolute inset-x-4 top-3 px-3 py-2 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-600 dark:text-rose-300 text-xs font-semibold"></div>
+            <div class="absolute right-3 bottom-3 flex items-center gap-3 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-[11px] font-semibold backdrop-blur-sm">
+              <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-indigo-500 inline-block"></span> f(x)</span>
+              <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 border-t-2 border-dashed border-amber-500 inline-block"></span> f'(x)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 translate-y-20 opacity-0 pointer-events-none transition-all duration-300 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs sm:text-sm font-semibold shadow-xl flex items-center gap-2">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 dark:text-emerald-600"></i>
+    <span id="toast-text">Скопировано</span>
+  </div>
+
+  <script>
+    // ==================== DATA: CHEAT SHEET TOPICS ====================
+    const TOPICS = [
+      // --- 8 КЛАСС (БАЗА: ДИСКРИМИНАНТ И ДАЛЬШЕ) ---
+      {
+        id: 'g8-discriminant',
+        track: 'grade8',
+        title: 'Квадратные уравнения: D, 2-я формула (D/4) и Виета',
+        subtitle: '8 класс • Как решать квадратные уравнения максимально быстро и без ошибок',
+        tags: ['дискриминант', 'd/4', 'чётный', 'виета', 'квадратные уравнения', '8 класс', 'корни'],
+        formulas: [
+          { label: '1-я формула (обычный D)', value: 'ax² + bx + c = 0\nD = b² − 4ac   ⇒   x₁,₂ = (−b ± √D) / (2a)' },
+          { label: '⚡ 2-я формула (если b чётное: b = 2k)', value: 'k = b / 2,   D₁ = D/4 = k² − ac\nx₁,₂ = (−k ± √D₁) / a   (считается в 4 раза проще!)' },
+          { label: 'Теорема Виета (при a = 1)', value: 'x₁ + x₂ = −b   |   x₁ · x₂ = c\nВ общем виде: x₁ + x₂ = −b/a,  x₁ · x₂ = c/a' },
+          { label: 'Изи-лайфхаки без дискриминанта', value: 'Если a + b + c = 0  ⇒  x₁ = 1,   x₂ = c / a\nЕсли a − b + c = 0  ⇒  x₁ = −1,  x₂ = −c / a' }
+        ],
+        example: 'Пример на 2-ю формулу: 3x² − 14x + 8 = 0. Видим чётное b = −14 ⇒ берём k = −7. Считаем D₁ = (−7)² − 3·8 = 49 − 24 = 25 (√D₁ = 5). Тогда x = (7 ± 5) / 3 ⇒ x₁ = 4, x₂ = 2/3. Никаких больших чисел и умножений на 4!'
+      },
+      {
+        id: 'g8-after-disc',
+        track: 'grade8',
+        title: 'Что после дискриминанта: биквадратные, дробные, неравенства',
+        subtitle: '8 класс • Следующие темы алгебры сразу после квадратных уравнений',
+        tags: ['биквадратные', 'дробно-рациональные', 'одз', 'неравенства', 'разложение', '8 класс'],
+        formulas: [
+          { label: 'Разложение на множители', value: 'ax² + bx + c = a(x − x₁)(x − x₂)\nНужно для сокращения дробей!' },
+          { label: 'Биквадратные уравнения', value: 'ax⁴ + bx² + c = 0  →  замена t = x² (t ≥ 0)\nРешаем at² + bt + c = 0, затем x = ±√t' },
+          { label: 'Дробно-рациональные уравнения', value: 'P(x) / Q(x) = 0  ⇔  P(x) = 0  и  Q(x) ≠ 0 (ОДЗ!)' },
+          { label: 'Квадратные неравенства', value: 'ax² + bx + c > 0: найди корни x₁, x₂, нарисуй параболу\n(a > 0 — ветви вверх; a < 0 — ветви вниз) и выбери знаки' }
+        ],
+        example: 'Частая ловушка в дробных уравнениях: нашёл корни числителя x₁ = 2 и x₂ = −3, а в знаменателе стоит (x − 2). Корень x = 2 обращает знаменатель в 0 — его обязательно нужно вычеркнуть по ОДЗ!'
+      },
+      {
+        id: 'g8-roots-fsu',
+        track: 'grade8',
+        title: 'Квадратные корни, степени и ФСУ',
+        subtitle: '8 класс • База, без которой сыплются вычисления в ОГЭ и ЕГЭ',
+        tags: ['корни', 'фсу', 'степени', 'модуль', '8 класс'],
+        formulas: [
+          { label: 'Свойства квадратных корней', value: '√(a·b) = √a · √b   |   √(a/b) = √a / √b   (a, b ≥ 0)\n(√a)² = a   |   √(a²) = |a|  (не забывай модуль!)' },
+          { label: 'Формулы сокращённого умножения (ФСУ)', value: '(a ± b)² = a² ± 2ab + b²\na² − b² = (a − b)(a + b)' },
+          { label: 'Отрицательные и нулевые степени', value: 'a⁻ⁿ = 1 / aⁿ   |   (a/b)⁻ⁿ = (b/a)ⁿ   |   a⁰ = 1 (a ≠ 0)' },
+          { label: 'Действия со степенями', value: 'aⁿ·aᵐ = aⁿ⁺ᵐ  |  aⁿ/aᵐ = aⁿ⁻ᵐ  |  (aⁿ)ᵐ = aⁿ·ᵐ' }
+        ],
+        example: 'Запомни намертво: √((−5)²) = |−5| = 5, а НЕ −5! А вот (a + b)² всегда имеет удвоенное произведение 2ab — про него чаще всего забывают.'
+      },
+      {
+        id: 'g8-geom',
+        track: 'grade8',
+        title: 'Геометрия 8 класса: Пифагор, площади, подобие, окружность',
+        subtitle: '8 класс • Главные теоремы для 1-й части ОГЭ №15–19',
+        tags: ['пифагор', 'площадь', 'подобие', 'окружность', 'вписанный угол', 'геометрия', '8 класс'],
+        formulas: [
+          { label: 'Пифагор и sin/cos/tg', value: 'c² = a² + b²  (тройки: 3-4-5, 5-12-13, 8-15-17)\nsin α = прот/гип  |  cos α = прил/гип  |  tg α = прот/прил' },
+          { label: 'Площади фигур', value: 'S_△ = ½·a·h  |  S_парал = a·h\nS_трап = ½(a + b)·h  |  S_ромба = ½·d₁·d₂' },
+          { label: 'Подобие треугольников', value: 'Если стороны относятся как k, то:\nP₁ / P₂ = k,   а площади  S₁ / S₂ = k²' },
+          { label: 'Углы в окружности', value: 'Центральный угол = дуге  |  Вписанный угол = ½ дуги\nВписанный угол на диаметр = 90°' }
+        ],
+        example: 'Касательная к окружности всегда перпендикулярна радиусу, проведённому в точку касания (90°). В задачах ОГЭ это сразу даёт прямоугольный треугольник и теорему Пифагора!'
+      },
+
+      // --- ВиС: ВЕРОЯТНОСТЬ И СТАТИСТИКА (8–11 КЛАСС) ---
+      {
+        id: 'vis-stat-graphs',
+        track: 'vis',
+        title: 'ВиС 8 класс: Статистика, множества и графы',
+        subtitle: 'Среднее, медиана, дисперсия, диаграммы Эйлера и деревья',
+        tags: ['вис', 'вероятность', 'статистика', 'медиана', 'дисперсия', 'множества', 'графы', '8 класс'],
+        formulas: [
+          { label: 'Описательная статистика', value: 'Среднее: x̄ = (x₁ + ... + xₙ) / n   |   Размах: R = x_max − x_min\nМедиана: среднее число в упорядоченном ряду (для чётного n — полусумма двух средних)' },
+          { label: 'Дисперсия и отклонение', value: 'D = S² = ∑(xᵢ − x̄)² / n   (средний квадрат отклонений)\nСтандартное отклонение: σ = √D' },
+          { label: 'Множества (Эйлер–Венн)', value: 'A ∪ B (объединение: ИЛИ)  |  A ∩ B (пересечение: И)\n|A ∪ B| = |A| + |B| − |A ∩ B|   (формула включений-исключений)' },
+          { label: 'Графы и деревья (8 кл)', value: 'Сумма степеней всех вершин = 2 · (число рёбер E)\nВ дереве с n вершинами всегда ровно (n − 1) ребро и нет циклов' }
+        ],
+        example: 'Как быстро найти медиану ряда [12, 3, 7, 20, 9]: сначала ОБЯЗАТЕЛЬНО отсортируй по возрастанию → [3, 7, 9, 12, 20]. Посередине стоит 9 — это и есть медиана!'
+      },
+      {
+        id: 'vis-comb-prob',
+        track: 'vis',
+        title: 'ВиС 8–9 класс: Комбинаторика и классическая вероятность',
+        subtitle: 'Правило умножения, факториал, P(A) = m/n, дерево вероятностей',
+        tags: ['вис', 'комбинаторика', 'факториал', 'сочетания', 'вероятность', 'дерево', '8 класс', '9 класс'],
+        formulas: [
+          { label: 'Классическая вероятность', value: 'P(A) = m / n   (m — благоприятные исходы, n — все равновозможные)\n0 ≤ P(A) ≤ 1   |   Противоположное: P(Ā) = 1 − P(A)' },
+          { label: 'Правила комбинаторики', value: 'Правило «ИЛИ» (выбор одного из): k + m вариантов\nПравило «И» (последовательный выбор): k · m вариантов' },
+          { label: 'Перестановки и сочетания', value: 'Pₙ = n! = 1·2·...·n   |   0! = 1\nСочетания (порядок НЕ важен): Cₙᵏ = n! / (k!·(n − k)!)' },
+          { label: 'Дерево случайного опыта', value: 'Вдоль одной ветки вероятности УМНОЖАЕМ (событие И событие)\nМежду разными подходящими ветками — СКЛАДЫВАЕМ (ИЛИ)' }
+        ],
+        example: 'Пример из ВиС 8 класса: бросают 2 кубика (всего n = 6·6 = 36 исходов). Найти вероятность, что сумма = 7. Подходят (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) — всего m = 6. Ответ: P = 6/36 = 1/6.'
+      },
+      {
+        id: 'vis-cond-exp',
+        track: 'vis',
+        title: 'ВиС 9–11 класс: Условная вероятность, Бернулли и E(X)',
+        subtitle: 'Независимые события, формула Бернулли, матожидание',
+        tags: ['вис', 'условная', 'бернулли', 'матожидание', 'независимые', 'распределение'],
+        formulas: [
+          { label: 'Сложение и умножение', value: 'P(A ∪ B) = P(A) + P(B) − P(A ∩ B)\nНезависимые события: P(A ∩ B) = P(A) · P(B)' },
+          { label: 'Условная вероятность', value: 'P(A | B) = P(A ∩ B) / P(B)   (вероятность A при условии, что B случилось)' },
+          { label: 'Схема Бернулли', value: 'Pₙ(k) = Cₙᵏ · pᵏ · (1 − p)ⁿ⁻ᵏ   (ровно k успехов из n опытов)' },
+          { label: 'Математическое ожидание', value: 'E(X) = x₁p₁ + x₂p₂ + ... + xₙpₙ   (средний «выигрыш» в серии опытов)' }
+        ],
+        example: 'Запомни: при решении задачи на «хотя бы один раз» почти всегда в 5 раз проще посчитать противоположное событие «ни разу» и вычесть из единицы: P(≥ 1) = 1 − P(0).'
+      },
+
+      // --- 9 КЛАСС И ОГЭ (ФИЗИКА • МАТЕМАТИКА • ИНФОРМАТИКА) ---
+      {
+        id: 'oge-structure',
+        track: 'oge9',
+        title: 'ОГЭ в 9 классе: какие 4 предмета сдают для технаря',
+        subtitle: '9 класс • 2 обязательных + 2 по выбору (связка под МИРЭА)',
+        tags: ['огэ', 'предметы', 'физика', 'информатика', 'математика', 'русский', '9 класс'],
+        formulas: [
+          { label: '2 обязательных предмета ОГЭ', value: '1) Русский язык\n2) Математика (алгебра + геометрия, минимум 2 балла по геометрии!)' },
+          { label: '2 предмета по выбору (ИТ / МИРЭА)', value: '3) Информатика (программирование, логика, графы, Excel)\n4) Физика (механика, теплота, электричество, оптика + лаба)' },
+          { label: 'Зачем брать Физику + Информатику?', value: 'Это идеальный набор для поступления в физмат/ИТ 10 класс\nи плавного перехода к ЕГЭ (профмат + инфа/физика → РТУ МИРЭА)' }
+        ],
+        example: 'На ОГЭ по математике важно набрать минимум 2 балла именно в блоке «Геометрия» (№15–19), иначе даже при 15 баллах по алгебре поставят двойку. Не игнорируй геометрию 8–9 класса!'
+      },
+      {
+        id: 'oge-phys-mech',
+        track: 'oge9',
+        title: 'ОГЭ Физика: Механика, Ньютон, энергия и давление',
+        subtitle: '9 класс • Кинематика, силы, импульс, закон Архимеда',
+        tags: ['физика', 'механика', 'ньютон', 'ускорение', 'энергия', 'импульс', 'архимед', 'огэ'],
+        formulas: [
+          { label: 'Кинематика (прямолинейное)', value: 'v = v₀ + a·t  |  S = v₀t + a·t²/2  |  S = (v² − v₀²) / (2a)' },
+          { label: 'Динамика и силы', value: 'F = m·a  |  F_тяж = m·g (g ≈ 10 м/с²)\nF_тр = μ·N  |  F_упр = k·Δx' },
+          { label: 'Импульс, работа и энергия', value: 'p = m·v  |  E_к = mv²/2  |  E_п = mgh\nA = F·S·cos α  |  N = A / t = F·v' },
+          { label: 'Давление и сила Архимеда', value: 'p = F / S  |  p_гидр = ρ·g·h  |  F_А = ρ_ж·g·V_погр' }
+        ],
+        example: 'Всегда переводи величины в СИ до подстановки: км/ч ÷ 3.6 = м/с, см → ÷100 в метры, граммы → ÷1000 в кг. На ОГЭ по физике g всегда берут равным 10 м/с².'
+      },
+      {
+        id: 'oge-phys-elec',
+        track: 'oge9',
+        title: 'ОГЭ Физика: Теплота, электричество и оптика',
+        subtitle: '9 класс • Закон Ома, мощность, КПД, теплообмен, линзы',
+        tags: ['физика', 'электричество', 'ом', 'теплота', 'кпд', 'оптика', 'линза', 'огэ'],
+        formulas: [
+          { label: 'Тепловые явления', value: 'Нагрев: Q = c·m·Δt  |  Плавление: Q = λ·m\nПарообразование: Q = L·m  |  Сгорание: Q = q·m' },
+          { label: 'Электрический ток и мощность', value: 'Закон Ома: I = U / R  |  Сопротивление: R = ρ·l / S\nМощность: P = U·I = I²R = U²/R  |  Q = I²·R·t' },
+          { label: 'Соединение резисторов', value: 'Последовательное: I = const,  R = R₁ + R₂\nПараллельное: U = const,  1/R = 1/R₁ + 1/R₂' },
+          { label: 'КПД, волны и оптика', value: 'η = (A_пол / Q_зат)·100%  |  λ = v·T = v / ν\nТонкая линза: 1/F = 1/d + 1/f,  D = 1/F' }
+        ],
+        example: 'Лайфхак для параллельного соединения двух резисторов: R_общ = (R₁ · R₂) / (R₁ + R₂). Если два одинаковых резистора по 10 Ом соединить параллельно, общее сопротивление сразу 10 / 2 = 5 Ом!'
+      },
+      {
+        id: 'oge-math-9',
+        track: 'oge9',
+        title: 'ОГЭ Математика (9 класс): Прогрессии и графики',
+        subtitle: '9 класс • ОГЭ №11 (графики) и №14 (прогрессии)',
+        tags: ['огэ', 'математика', 'прогрессия', 'парабола', 'гипербола', 'графики', '9 класс'],
+        formulas: [
+          { label: 'Арифметическая прогрессия', value: 'aₙ = a₁ + d·(n − 1)\nSₙ = (a₁ + aₙ)·n / 2 = (2a₁ + d(n − 1))·n / 2' },
+          { label: 'Геометрическая прогрессия', value: 'bₙ = b₁ · qⁿ⁻¹\nSₙ = b₁·(qⁿ − 1) / (q − 1)   (q ≠ 1)' },
+          { label: 'Прямая и парабола (ОГЭ №11)', value: 'y = kx + b: k > 0 растёт, b — пересечение с Oy\ny = ax² + bx + c: a > 0 ветви вверх, c — точка на Oy, x_в = −b/(2a)' },
+          { label: 'Гипербола', value: 'y = k / x: при k > 0 — в I и III четвертях; при k < 0 — во II и IV' }
+        ],
+        example: 'В ОГЭ №11 по параболе сразу смотри на два знака: куда направлены ветви (знак a) и где график пересекает вертикальную ось Oy (знак c). В 90% задач этого хватает, чтобы сопоставить графики за 10 секунд.'
+      },
+      {
+        id: 'oge-inf-9',
+        track: 'oge9',
+        title: 'ОГЭ Информатика: Кодирование, логика и графы',
+        subtitle: '9 класс • 2-й профильный предмет ОГЭ (№1, №3, №4, №9, №16)',
+        tags: ['информатика', 'огэ', 'логика', 'кодирование', 'графы', 'python', '9 класс'],
+        formulas: [
+          { label: 'Информационный объём (ОГЭ №1)', value: 'I = K · i   (K — число символов, i — вес 1 символа в битах)\n1 байт = 8 бит  |  1 Кбайт = 1024 байт' },
+          { label: 'Алгебра логики (ОГЭ №3)', value: 'Приоритет: 1) НЕ (¬)  →  2) И (∧)  →  3) ИЛИ (∨)\nДе Морган: НЕ(A И B) = (НЕ A) ИЛИ (НЕ B)' },
+          { label: 'Число путей в графе (ОГЭ №9)', value: 'Старт = 1. Для каждой следующей вершины:\nN(v) = сумма N всех вершин, откуда в v входит стрелка' },
+          { label: 'Задачка на Python (ОГЭ №16)', value: 'Кратно k: x % k == 0  |  Последняя цифра: x % 10\nСумма цифр: sum(map(int, str(x)))' }
+        ],
+        example: 'В ОГЭ №3 аккуратно снимай отрицание НЕ: `НЕ (x > 10)` превращается в `x <= 10` (знак становится НЕстрогим!), а `НЕ (x <= 5)` — в `x > 5`.'
+      },
+
+      // --- 10-11 ПРОФИЛЬ (ЕГЭ) ---
+      {
+        id: 'ege-trig',
+        track: 'ege',
+        title: 'Тригонометрия: формулы и приведение',
+        subtitle: 'ЕГЭ №7, №13 • Тождества, двойной угол, таблица',
+        tags: ['sin', 'cos', 'tg', 'двойной угол', 'формулы приведения', 'тригонометрия'],
+        formulas: [
+          { label: 'Основное тождество', value: 'sin²α + cos²α = 1  |  1 + tg²α = 1 / cos²α' },
+          { label: 'Двойной угол', value: 'sin(2α) = 2·sinα·cosα\ncos(2α) = cos²α − sin²α = 2cos²α − 1 = 1 − 2sin²α' },
+          { label: 'Сумма углов', value: 'sin(α ± β) = sinα·cosβ ± cosα·sinβ\ncos(α ± β) = cosα·cosβ ∓ sinα·sinβ' },
+          { label: 'Уравнения', value: 'sin x = a ⇒ x = (−1)ⁿ·arcsin(a) + πn, n ∈ ℤ\ncos x = a ⇒ x = ±arccos(a) + 2πn, n ∈ ℤ' }
+        ],
+        example: 'Правило лошади (формулы приведения): если в аргументе π/2 или 3π/2 (вертикальная ось — киваем «да»), функция меняется на кофункцию (sin ↔ cos). Знак берём по исходной функции в нужной четверти. Например: cos(π/2 + x) = −sin x (2-я четверть, cos < 0).'
+      },
+      {
+        id: 'ege-log',
+        track: 'ege',
+        title: 'Логарифмы и степени',
+        subtitle: 'ЕГЭ №6, №7, №15 • Свойства, ОДЗ, рационализация',
+        tags: ['log', 'ln', 'степени', 'одз', 'рационализация', 'логарифм'],
+        formulas: [
+          { label: 'Определение и ОДЗ', value: 'logₐ(b) = c ⇔ aᶜ = b   (a > 0, a ≠ 1, b > 0)' },
+          { label: 'Основные свойства', value: 'logₐ(xy) = logₐx + logₐy  |  logₐ(x/y) = logₐx − logₐy\nlogₐ(bᵏ) = k·logₐb  |  log_(aⁿ)(b) = (1/n)·logₐb' },
+          { label: 'Переход к новому основанию', value: 'logₐ(b) = log_c(b) / log_c(a)  |  logₐ(b) = 1 / log_b(a)' },
+          { label: 'Метод рационализации', value: 'logₐ(f) − logₐ(g)  ⇔  (a − 1)(f − g)  (на ОДЗ)' }
+        ],
+        example: 'Пример ЕГЭ №15: чтобы решить log_(x−1)(2x − 5) ≥ 0, сначала запиши ОДЗ (x − 1 > 0, x − 1 ≠ 1, 2x − 5 > 0 ⇒ x > 2.5), затем замени log_(x−1)(2x − 5) − log_(x−1)(1) на (x − 1 − 1)(2x − 5 − 1) ≥ 0 ⇒ (x − 2)(2x − 6) ≥ 0.'
+      },
+      {
+        id: 'ege-deriv',
+        track: 'ege',
+        title: 'Производная и исследование функций',
+        subtitle: 'ЕГЭ №8, №12 • Таблица, касательная, экстремумы',
+        tags: ['производная', 'касательная', 'экстремум', 'максимум', 'минимум'],
+        formulas: [
+          { label: 'Базовые производные', value: '(xⁿ)\' = n·xⁿ⁻¹  |  (eˣ)\' = eˣ  |  (ln x)\' = 1/x\n(sin x)\' = cos x  |  (cos x)\' = −sin x  |  (√x)\' = 1/(2√x)' },
+          { label: 'Правила дифференцирования', value: '(u·v)\' = u\'v + uv\'\n(u/v)\' = (u\'v − uv\') / v²\n(f(g(x)))\' = f\'(g(x)) · g\'(x)' },
+          { label: 'Геометрический смысл', value: 'f\'(x₀) = k = tg α  (угловой коэффициент касательной)' },
+          { label: 'Уравнение касательной', value: 'y = f(x₀) + f\'(x₀)·(x − x₀)' }
+        ],
+        example: 'Как найти точку максимума на ЕГЭ №12: 1) Найти f\'(x); 2) Решить f\'(x) = 0; 3) Расставить знаки f\'(x) на числовой прямой. Переход с «+» на «−» — это точка максимума, с «−» на «+» — точка минимума.'
+      },
+      {
+        id: 'ege-geom',
+        track: 'ege',
+        title: 'Стереометрия и планиметрия',
+        subtitle: 'ЕГЭ №1, №3, №14, №17 • Объёмы, площади, теоремы',
+        tags: ['объем', 'площадь', 'пирамида', 'конус', 'шар', 'косинусов', 'стереометрия'],
+        formulas: [
+          { label: 'Теоремы треугольника', value: 'c² = a² + b² − 2ab·cos γ  (т. косинусов)\na/sin α = b/sin β = c/sin γ = 2R  (т. синусов)' },
+          { label: 'Объёмы тел', value: 'V_призмы = S_осн·h  |  V_пирамиды = (1/3)·S_осн·h\nV_цил = πR²h  |  V_кон = (1/3)πR²h  |  V_шара = (4/3)πR³' },
+          { label: 'Площади поверхностей', value: 'S_бок.цил = 2πRh  |  S_бок.кон = πRl  |  S_сферы = 4πR²' },
+          { label: 'Угол между плоскостями', value: 'cos φ = |n₁ · n₂| / (|n₁| · |n₂|)  (метод координат)' }
+        ],
+        example: 'Лайфхак для ЕГЭ №3: если все линейные размеры тела увеличить в k раз, площадь поверхности вырастет в k² раз, а объём — в k³ раз.'
+      },
+      {
+        id: 'ege-prob',
+        track: 'ege',
+        title: 'Вероятность и экономическая задача',
+        subtitle: 'ЕГЭ №4, №5, №16 • Бернулли, кредиты, вклады',
+        tags: ['вероятность', 'кредит', 'аннуитет', 'дифференцированный', 'экономика'],
+        formulas: [
+          { label: 'События', value: 'P(A + B) = P(A) + P(B) − P(A·B)\nНезависимые: P(A·B) = P(A)·P(B)' },
+          { label: 'Формула Бернулли', value: 'Pₙ(k) = Cₙᵏ · pᵏ · (1 − p)ⁿ⁻ᵏ' },
+          { label: 'Коэффициент роста', value: 'k = 1 + r/100  (r — процентная ставка)' },
+          { label: 'Дифференцированный платёж', value: 'Переплата = S · (r/100) · (n + 1) / 2' }
+        ],
+        example: 'В дифференцированном кредите долг уменьшается равномерно: S, S(n−1)/n, ..., S/n. Поэтому проценты образуют арифметическую прогрессию, и общую переплату можно быстро проверить формулой S·(r/100)·(n+1)/2.'
+      },
+      {
+        id: 'ege-param',
+        track: 'ege',
+        title: 'Неравенства и параметры',
+        subtitle: 'ЕГЭ №15, №18 • Метод интервалов, окружность, симметрия',
+        tags: ['параметр', 'окружность', 'интервалы', 'модуль', 'симметрия'],
+        formulas: [
+          { label: 'Уравнение окружности', value: '(x − x₀)² + (y − y₀)² = R²  (центр (x₀, y₀), радиус R)' },
+          { label: 'Раскрытие модулей', value: '|f(x)| = g(x) ⇔ (f = g или f = −g) при g ≥ 0\n|a| + |b| = |a + b| ⇔ a·b ≥ 0' },
+          { label: 'Чётность в параметрах', value: 'Если x → −x не меняет уравнение, то для единственного решения необходимо x = 0' },
+          { label: 'Расстояние между точками', value: 'd = √((x₂ − x₁)² + (y₂ − y₁)²)' }
+        ],
+        example: 'В задачах №18 с графиком в координатах (x; a) или (x; y) ищи «пучок прямых» y = a(x − x₀) + y₀ — все такие прямые проходят через фиксированную точку (x₀; y₀), меняя лишь наклон a.'
+      },
+
+      // --- 1 КУРС МИРЭА (ВЫШМАТ) ---
+      {
+        id: 'mirea-mat',
+        track: 'mirea',
+        title: 'Матрицы и определители',
+        subtitle: '1 курс МИРЭА • Линал: операции, Саррюс, обратная матрица',
+        tags: ['матрица', 'определитель', 'саррюс', 'обратная', 'ранг', 'линал'],
+        formulas: [
+          { label: 'Умножение матриц', value: '(A·B)ᵢⱼ = ∑ₖ aᵢₖ · bₖⱼ   (строка A на столбец B; A·B ≠ B·A)' },
+          { label: 'Определитель 2×2', value: 'det = a₁₁a₂₂ − a₁₂a₂₁' },
+          { label: 'Правило Саррюса (3×3)', value: 'det = a₁₁a₂₂a₃₃ + a₁₂a₂₃a₃₁ + a₁₃a₂₁a₃₂ − a₁₃a₂₂a₃₁ − a₁₁a₂₃a₃₂ − a₁₂a₂₁a₃₃' },
+          { label: 'Обратная матрица', value: 'A⁻¹ = (1 / det A) · (A*)ᵀ   (существует ⇔ det A ≠ 0)' }
+        ],
+        example: 'Алгебраическое дополнение Aᵢⱼ = (−1)^(i+j) · Mᵢⱼ, где Mᵢⱼ — минор (определитель после вычёркивания i-й строки и j-го столбца). Не забудь транспонировать матрицу алгебраических дополнений при поиске A⁻¹!'
+      },
+      {
+        id: 'mirea-slau',
+        track: 'mirea',
+        title: 'СЛАУ: Крамер, Гаусс, Кронекер–Капелли',
+        subtitle: '1 курс МИРЭА • Решение систем линейных уравнений',
+        tags: ['слау', 'крамер', 'гаусс', 'кронекер', 'капелли', 'ранг'],
+        formulas: [
+          { label: 'Метод Крамера', value: 'xᵢ = Δᵢ / Δ   (Δ ≠ 0; Δᵢ — замена i-го столбца на столбец b)' },
+          { label: 'Матричный метод', value: 'A·X = B  ⇒  X = A⁻¹·B' },
+          { label: 'Теорема Кронекера–Капелли', value: 'СЛАУ совместна ⇔ rank(A) = rank(A|B)\nЕдинственное решение ⇔ rank(A) = rank(A|B) = n' },
+          { label: 'Метод Гаусса', value: 'Прямой ход: приведение (A|B) к ступенчатому виду\nОбратный ход: нахождение xₙ, xₙ₋₁, ..., x₁' }
+        ],
+        example: 'На контрольной в МИРЭА метод Гаусса универсален (работает даже при Δ = 0 и для прямоугольных систем). Если появилась строка вида [0 0 0 | 5] — система несовместна (решений нет).'
+      },
+      {
+        id: 'mirea-angem',
+        track: 'mirea',
+        title: 'Аналитическая геометрия и векторы',
+        subtitle: '1 курс МИРЭА • Скалярное, векторное, смешанное произведения',
+        tags: ['вектор', 'скалярное', 'векторное', 'смешанное', 'плоскость', 'прямая', 'ангем'],
+        formulas: [
+          { label: 'Скалярное произведение', value: 'a·b = x₁x₂ + y₁y₂ + z₁z₂ = |a||b|·cos φ  (a ⊥ b ⇔ a·b = 0)' },
+          { label: 'Векторное произведение', value: '[a × b] = det | i  j  k ; x₁ y₁ z₁ ; x₂ y₂ z₂ |   (|a×b| = S_парал)' },
+          { label: 'Смешанное произведение', value: '(a, b, c) = det[a; b; c]   (V_парал = |det|, V_пир = |det|/6)' },
+          { label: 'Плоскость и расстояние', value: 'Ax + By + Cz + D = 0,  n = (A, B, C)\nd(M₀, π) = |Ax₀ + By₀ + Cz₀ + D| / √(A² + B² + C²)' }
+        ],
+        example: 'Три вектора компланарны (лежат в одной плоскости) тогда и только тогда, когда их смешанное произведение равно нулю: det(a, b, c) = 0.'
+      },
+      {
+        id: 'mirea-limits',
+        track: 'mirea',
+        title: 'Пределы, эквивалентности и Лопиталь',
+        subtitle: '1 курс МИРЭА • Матанализ: раскрытие неопределённостей',
+        tags: ['предел', 'lim', 'лопиталь', 'эквивалентность', 'замечательный', 'матанализ'],
+        formulas: [
+          { label: 'Замечательные пределы', value: 'lim(x→0) (sin x / x) = 1\nlim(x→∞) (1 + 1/x)ˣ = e  |  lim(x→0) (1 + x)^(1/x) = e' },
+          { label: 'Эквивалентности (x → 0)', value: 'sin x ~ tg x ~ arcsin x ~ ln(1+x) ~ eˣ−1 ~ x\n1 − cos x ~ x²/2  |  (1+x)ᵃ − 1 ~ a·x' },
+          { label: 'Правило Лопиталя', value: 'При [0/0] или [∞/∞]:  lim f(x)/g(x) = lim f\'(x)/g\'(x)' },
+          { label: 'Неопределённость [1^∞]', value: 'lim u(x)^v(x) = exp( lim v(x)·(u(x) − 1) )' }
+        ],
+        example: 'Важно: заменять функции на эквивалентные можно ТОЛЬКО в произведениях и частных! В суммах и разностях (например, tg x − sin x) замена даёт ошибку — там применяй Лопиталя или формулу Тейлора.'
+      },
+      {
+        id: 'mirea-integrals',
+        track: 'mirea',
+        title: 'Интегральное исчисление',
+        subtitle: '1 курс МИРЭА • Таблица, замена, по частям, Ньютон–Лейбниц',
+        tags: ['интеграл', 'первообразная', 'по частям', 'ньютон', 'лейбниц', 'матанализ'],
+        formulas: [
+          { label: 'Таблица интегралов', value: '∫xⁿ dx = xⁿ⁺¹/(n+1) + C  |  ∫(1/x)dx = ln|x| + C\n∫dx/(x²+a²) = (1/a)·arctg(x/a) + C  |  ∫dx/√(a²−x²) = arcsin(x/a) + C' },
+          { label: 'Интегрирование по частям', value: '∫ u·dv = u·v − ∫ v·du' },
+          { label: 'Правило выбора u (LIATE)', value: 'L (ln) → I (arcsin/arctg) → A (многочлен) → T (sin/cos) → E (eˣ)' },
+          { label: 'Ньютон–Лейбниц', value: '∫[a..b] f(x)dx = F(b) − F(a)' }
+        ],
+        example: 'Пример по частям: ∫x·eˣ dx. По правилу LIATE берём u = x (du = dx), dv = eˣ dx (v = eˣ). Получаем: x·eˣ − ∫eˣ dx = x·eˣ − eˣ + C = eˣ(x − 1) + C.'
+      },
+      {
+        id: 'mirea-complex-ode',
+        track: 'mirea',
+        title: 'Комплексные числа и ДУ 1-го порядка',
+        subtitle: '1 курс МИРЭА • Формула Эйлера, Муавра, разделяющиеся переменные',
+        tags: ['комплексные', 'эйлер', 'муавр', 'диффуры', 'ду', 'бернулли'],
+        formulas: [
+          { label: 'Формы записи z', value: 'z = a + bi = r(cos φ + i·sin φ) = r·e^(iφ)\nr = |z| = √(a² + b²),  i² = −1' },
+          { label: 'Формула Муавра', value: 'zⁿ = rⁿ · (cos(nφ) + i·sin(nφ))' },
+          { label: 'ДУ с разделяющимися', value: 'y\' = f(x)·g(y) ⇒ dy / g(y) = f(x) dx ⇒ ∫dy/g(y) = ∫f(x)dx' },
+          { label: 'Линейное ДУ (метод Бернулли)', value: 'y\' + P(x)y = Q(x)  →  подстановка y = u(x)·v(x)' }
+        ],
+        example: 'В методе Бернулли подставь y = uv, y\' = u\'v + uv\': получишь u\'v + u(v\' + P·v) = Q. Сначала обнули скобку v\' + P·v = 0 (найдёшь v), затем реши u\'v = Q (найдёшь u + C).'
+      },
+
+      // --- КОДИНГ (PYTHON • C++ • АЛГОРИТМЫ) ---
+      {
+        id: 'code-py-core',
+        track: 'coding',
+        title: 'Python 3: база, структуры и срезы',
+        subtitle: 'Списки, словари, множества, list comprehension, функции',
+        tags: ['python', 'питон', 'списки', 'срезы', 'словари', 'def', 'lambda'],
+        code: `# Срезы [start:stop:step]
+s = "MIREA_2026"
+rev = s[::-1]           # "6202_AERIM"
+
+# List / Dict comprehension
+squares = [x**2 for x in range(10) if x % 2 == 0]
+freq = {ch: s.count(ch) for ch in set(s)}
+
+# Функции, *args и lambda-сортировка
+def power(x, p=2):
+    return x ** p
+
+pairs = [(1, 5), (2, 1), (3, 4)]
+pairs.sort(key=lambda item: item[1])  # сортировка по 2-му элементу`,
+        example: 'Поиск элемента `x in my_set` или `x in my_dict` работает за O(1), а `x in my_list` — за O(n). Всегда используй `set` для быстрых проверок принадлежности!'
+      },
+      {
+        id: 'code-py-ege',
+        track: 'coding',
+        title: 'Python 3: шаблоны для ЕГЭ и олимпиад',
+        subtitle: 'itertools, @lru_cache, системы счисления, чтение файлов',
+        tags: ['python', 'егэ', 'itertools', 'lru_cache', 'рекурсия', 'системы счисления'],
+        code: `from functools import lru_cache
+from itertools import product, permutations
+
+# Мемоизация для рекурсии (ЕГЭ №16, №19-21, №23)
+@lru_cache(None)
+def f(n):
+    if n <= 1: return 1
+    return f(n - 1) + f(n - 2)
+
+# Перебор слов фиксированной длины (ЕГЭ №8)
+cnt = sum(1 for p in product("АБВГ", repeat=4) if p.count("А") == 1)
+
+# Перевод в произвольную СС (base 2..36)
+def to_base(n, base):
+    digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    res = ""
+    while n > 0:
+        res = digits[n % base] + res
+        n //= base
+    return res or "0"`,
+        example: 'Если рекурсия глубокая (например, n = 3000), добавь `import sys; sys.setrecursionlimit(10000)` и предварительно прогрей кэш циклом `for i in range(n): f(i)`.'
+      },
+      {
+        id: 'code-cpp-stl',
+        track: 'coding',
+        title: 'C++ (1 курс МИРЭА): база и STL',
+        subtitle: 'vector, map, set, sort, ссылки и быстрый ввод-вывод',
+        tags: ['c++', 'cpp', 'stl', 'vector', 'map', 'set', 'мирэа', 'указатели'],
+        code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr); // ускоряет cin/cout в 5-10 раз
+
+    vector<int> a = {5, 2, 9, 1, 5};
+    sort(a.begin(), a.end()); // O(n log n)
+
+    // Бинарный поиск в отсортированном векторе
+    bool found = binary_search(a.begin(), a.end(), 5);
+
+    unordered_map<string, int> cnt;
+    cnt["mirea"]++;
+    cout << (found ? "YES\\n" : "NO\\n");
+}`,
+        example: 'На лабах 1 курса МИРЭА по C++ помни разницу: `int& ref = x` (ссылка — псевдоним, не бывает null) и `int* ptr = &x` (указатель — хранит адрес, разыменовывается `*ptr`). Передавай большие векторы в функции как `const vector<int>& v`, чтобы не копировать память.'
+      },
+      {
+        id: 'code-algo-bigo',
+        track: 'coding',
+        title: 'Алгоритмы: Big-O и бинарный поиск',
+        subtitle: 'Оценка сложности, два указателя, префиксные суммы',
+        tags: ['алгоритмы', 'big-o', 'бинарный поиск', 'сложность', 'префиксные суммы'],
+        code: `# Бинарный поиск первого x >= target — O(log n)
+def lower_bound(arr, target):
+    l, r = 0, len(arr)
+    while l < r:
+        mid = (l + r) // 2
+        if arr[mid] < target:
+            l = mid + 1
+        else:
+            r = mid
+    return l
+
+# Префиксные суммы: сумма на [L, R] за O(1)
+arr = [3, 1, 4, 1, 5, 9]
+pref = [0]
+for x in arr:
+    pref.append(pref[-1] + x)
+range_sum = pref[4] - pref[1]  # сумма arr[1..3] = 1+4+1 = 6`,
+        example: 'Ориентир по ограничениям задач (1 сек ≈ 10⁸ операций): n ≤ 20 → O(2ⁿ); n ≤ 2000 → O(n²); n ≤ 2·10⁵ → O(n log n); n ≤ 10⁷ → O(n); n ≤ 10¹⁸ → O(log n) или O(1).'
+      },
+      {
+        id: 'code-graphs-dp',
+        track: 'coding',
+        title: 'Графы (BFS / DFS) и Динамика (ДП)',
+        subtitle: 'Поиск кратчайшего пути, обход графа, 1D-рюкзак',
+        tags: ['графы', 'bfs', 'dfs', 'дп', 'динамика', 'очередь', 'алгоритмы'],
+        code: `from collections import deque
+
+# BFS: кратчайший путь в невзвешенном графе — O(V + E)
+def bfs(graph, start):
+    dist = {start: 0}
+    q = deque([start])
+    while q:
+        v = q.popleft()
+        for nxt in graph[v]:
+            if nxt not in dist:
+                dist[nxt] = dist[v] + 1
+                q.append(nxt)
+    return dist
+
+# ДП: минимальное число монет для суммы S
+def min_coins(coins, S):
+    dp = [10**9] * (S + 1)
+    dp[0] = 0
+    for s in range(1, S + 1):
+        for c in coins:
+            if s >= c:
+                dp[s] = min(dp[s], dp[s - c] + 1)
+    return dp[S]`,
+        example: 'Выбирай BFS (очередь `deque`), когда нужен кратчайший путь по числу рёбер. Выбирай DFS (рекурсия/стек), когда нужно найти компоненты связности, циклы или сделать топологическую сортировку.'
+      },
+      {
+        id: 'code-prac-git',
+        track: 'coding',
+        title: 'Практика: try/except, JSON и Git',
+        subtitle: 'Безопасный код, работа с данными и базовые команды Git',
+        tags: ['git', 'json', 'try', 'except', 'ошибки', 'автоматизация', 'практика'],
+        code: `import json
+
+# Безопасное чтение/запись JSON
+data = {"course": "MIREA 1", "progress": 85}
+with open("state.json", "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+
+try:
+    val = int("42")
+except ValueError as err:
+    print(f"Ошибка формата: {err}")
+
+# Базовый цикл работы в Git:
+# git status
+# git add .
+# git commit -m "feat: add matrix solver"
+# git push origin main`,
+        example: 'Никогда не пиши голый `except:` — перехватывай конкретный тип исключения (`ValueError`, `KeyError`, `TimeoutError`), чтобы случайно не скрыть баги или прерывание программы `KeyboardInterrupt`.'
+      }
+    ];
+
+    // ==================== DATA: FLASHCARDS ====================
+    const FLASHCARDS = [
+      // GRADE 8 (5)
+      { id: 'fc_g8_1', track: 'grade8', sub: '2-я формула (D/4)', front: 'Как считается 2-я формула дискриминанта (при чётном b = 2k)?', back: 'k = b/2,  D₁ = k² − ac,  x = (−k ± √D₁) / a', note: 'Когда b чётное, эта формула уменьшает вычисления в 4 раза и убирает двойку из знаменателя.' },
+      { id: 'fc_g8_2', track: 'grade8', sub: 'Лайфхак корней', front: 'Чему сразу равны корни ax² + bx + c = 0, если a + b + c = 0?', back: 'x₁ = 1,  x₂ = c / a', note: 'А если a − b + c = 0, то сразу x₁ = −1 и x₂ = −c / a — вообще без дискриминанта!' },
+      { id: 'fc_g8_3', track: 'grade8', sub: 'Теорема Виета', front: 'Чему равны сумма и произведение корней x² + bx + c = 0?', back: 'x₁ + x₂ = −b  |  x₁ · x₂ = c', note: 'Обрати внимание на МИНУС у суммы корней!' },
+      { id: 'fc_g8_4', track: 'grade8', sub: 'Корни', front: 'Чему равно √(a²) для любого числа a?', back: '√(a²) = |a|  (модуль числа a)', note: 'Квадратный корень не может быть отрицательным, поэтому √((−7)²) = 7.' },
+      { id: 'fc_g8_5', track: 'grade8', sub: 'Геометрия 8 кл', front: 'Как относятся площади подобных треугольников с коэффициентом подобия k?', back: 'S₁ / S₂ = k²', note: 'Периметры и высоты относятся как k, а площади — как квадрат k.' },
+
+      // VIS (4)
+      { id: 'fc_vis_1', track: 'vis', sub: 'ВиС • Статистика', front: 'Как найти медиану числового набора и что такое размах?', back: 'Упорядочить ряд → взять центр;  Размах R = max − min', note: 'Если чисел чётное количество, медиана — это среднее арифметическое двух центральных чисел.' },
+      { id: 'fc_vis_2', track: 'vis', sub: 'ВиС • Графы', front: 'Сколько рёбер в дереве с n вершинами и чему равна сумма степеней в любом графе?', back: 'Рёбер в дереве: n − 1  |  Сумма степеней = 2E', note: 'Из-за того что сумма степеней чётна (2E), вершин с нечётной степенью всегда чётное количество!' },
+      { id: 'fc_vis_3', track: 'vis', sub: 'ВиС • Вероятность', front: 'Как считать вероятность события «хотя бы один раз»?', back: 'P(хотя бы 1) = 1 − P(ни разу)', note: 'Работает безотказно для монет, кубиков, лампочек и стрелков в ВиС, ОГЭ и ЕГЭ.' },
+      { id: 'fc_vis_4', track: 'vis', sub: 'ВиС • Множества', front: 'Формула включений-исключений для объединения двух множеств A ∪ B', back: '|A ∪ B| = |A| + |B| − |A ∩ B|', note: 'Вычитаем пересечение, чтобы элементы из A ∩ B не посчитались дважды.' },
+
+      // OGE 9 (5)
+      { id: 'fc_oge_1', track: 'oge9', sub: 'ОГЭ Физика', front: 'Формула пути при равноускоренном движении (через t и без t)', back: 'S = v₀t + at²/2   |   S = (v² − v₀²) / (2a)', note: 'Вторая формула спасает в задачах, где время t вообще не дано.' },
+      { id: 'fc_oge_2', track: 'oge9', sub: 'ОГЭ Физика', front: 'Закон Ома для участка цепи и 3 формулы электрической мощности', back: 'I = U / R   |   P = U·I = I²·R = U² / R', note: 'Выбирай I²R для последовательного соединения и U²/R для параллельного.' },
+      { id: 'fc_oge_3', track: 'oge9', sub: 'ОГЭ Физика', front: 'Формула количества теплоты при нагревании и формула силы Архимеда', back: 'Q = c·m·Δt   |   F_А = ρ_ж·g·V_погр', note: 'В силе Архимеда всегда бери плотность ЖИДКОСТИ (или газа) и объём ПОГРУЖЁННОЙ части тела.' },
+      { id: 'fc_oge_4', track: 'oge9', sub: 'ОГЭ Математика', front: 'Формула n-го члена и суммы арифметической прогрессии', back: 'aₙ = a₁ + d(n − 1)   |   Sₙ = (a₁ + aₙ)·n / 2', note: 'Попадается почти в каждом варианте ОГЭ №14.' },
+      { id: 'fc_oge_5', track: 'oge9', sub: 'ОГЭ Информатика', front: 'Как раскрыть НЕ (x > 10) и НЕ (A И B) в алгебре логики?', back: 'x <= 10   |   (НЕ A) ИЛИ (НЕ B)', note: 'Строгий знак при отрицании становится нестрогим, а И меняется на ИЛИ (закон де Моргана).' },
+
+      // EGE (8)
+      { id: 'fc1', track: 'ege', sub: 'Тригонометрия', front: 'Чему равен cos(2α) через cos²α и через sin²α?', back: '2cos²α − 1 = 1 − 2sin²α', note: 'Обе формы следуют из cos²α − sin²α и основного тождества sin²α + cos²α = 1.' },
+      { id: 'fc2', track: 'ege', sub: 'Логарифмы', front: 'Как работает метод рационализации для logₐ(f) − logₐ(g)?', back: '(a − 1)(f − g)', note: 'Знак разности совпадает со знаком произведения (a − 1)(f − g) на ОДЗ: a > 0, a ≠ 1, f > 0, g > 0.' },
+      { id: 'fc3', track: 'ege', sub: 'Производная', front: 'Чему равна производная частного (u / v)\'?', back: '(u\'v − uv\') / v²', note: 'В числителе обязательно МИНУС, а в знаменателе квадрат исходного знаменателя.' },
+      { id: 'fc4', track: 'ege', sub: 'Производная', front: 'Геометрический смысл производной f\'(x₀)', back: 'f\'(x₀) = k = tg α', note: 'Равна угловому коэффициенту касательной к графику в точке x₀.' },
+      { id: 'fc5', track: 'ege', sub: 'Стереометрия', front: 'Формулы объёма конуса и шара', back: 'V_кон = (1/3)πR²h  |  V_шара = (4/3)πR³', note: 'Площадь сферы равна производной объёма шара по R: S = 4πR².' },
+      { id: 'fc6', track: 'ege', sub: 'Планиметрия', front: 'Теорема косинусов для стороны c', back: 'c² = a² + b² − 2ab·cos γ', note: 'Обобщение теоремы Пифагора для произвольного треугольника (при γ = 90° cos γ = 0).' },
+      { id: 'fc7', track: 'ege', sub: 'Экономика №16', front: 'Общая переплата по дифференцированному кредиту на n месяцев', back: 'S · (r / 100) · (n + 1) / 2', note: 'Работает, когда основной долг каждый месяц уменьшается на одну и ту же сумму S/n.' },
+      { id: 'fc8', track: 'ege', sub: 'Параметры', front: 'Уравнение окружности с центром (x₀, y₀) и радиусом R', back: '(x − x₀)² + (y − y₀)² = R²', note: 'Часто встречается в №18 вместе с семейством прямых (пучком).' },
+
+      // MIREA (8)
+      { id: 'fc9', track: 'mirea', sub: 'Линал', front: 'Условие существования обратной матрицы A⁻¹', back: 'det(A) ≠ 0', note: 'Матрица с ненулевым определителем называется невырожденной. A⁻¹ = (1/det A)·(A*)ᵀ.' },
+      { id: 'fc10', track: 'mirea', sub: 'СЛАУ', front: 'Формулировка теоремы Кронекера–Капелли', back: 'rank(A) = rank(A|B)', note: 'СЛАУ совместна ⇔ ранг основной матрицы равен рангу расширенной матрицы.' },
+      { id: 'fc11', track: 'mirea', sub: 'Ангем', front: 'Условие перпендикулярности и компланарности векторов', back: 'a ⊥ b ⇔ a·b = 0  |  компланарны ⇔ (a,b,c) = 0', note: 'Скалярное произведение = 0 даёт ортогональность; смешанное = 0 — векторы в одной плоскости.' },
+      { id: 'fc12', track: 'mirea', sub: 'Пределы', front: 'Первый и второй замечательные пределы', back: 'lim(x→0) sin(x)/x = 1  |  lim(x→∞) (1+1/x)ˣ = e', note: 'База для раскрытия неопределённостей [0/0] и [1^∞].' },
+      { id: 'fc13', track: 'mirea', sub: 'Эквивалентности', front: 'Чему эквивалентно 1 − cos x при x → 0?', back: '1 − cos x ~ x² / 2', note: 'Помни: эквивалентности применяются только в произведениях и частных, не в суммах.' },
+      { id: 'fc14', track: 'mirea', sub: 'Интегралы', front: 'Формула интегрирования по частям', back: '∫ u·dv = u·v − ∫ v·du', note: 'Выбирай u по приоритету LIATE: Логарифмы → Обратные триг. → Многочлены → Триг. → Экспоненты.' },
+      { id: 'fc15', track: 'mirea', sub: 'Интегралы', front: 'Табличный интеграл ∫ dx / (x² + a²)', back: '(1/a)·arctg(x/a) + C', note: 'Один из самых частых интегралов в типовых расчётах 1 курса МИРЭА.' },
+      { id: 'fc16', track: 'mirea', sub: 'Комплексные', front: 'Формула Муавра для возведения z в степень n', back: 'zⁿ = rⁿ(cos(nφ) + i·sin(nφ))', note: 'Модуль возводится в степень n, а аргумент умножается на n.' },
+
+      // CODING (8)
+      { id: 'fc17', track: 'coding', sub: 'Big-O', front: 'Сложность поиска элемента в list vs set/dict в Python', back: 'list: O(n)  |  set/dict: O(1) в среднем', note: 'set и dict основаны на хэш-таблицах, поэтому проверка `x in s` почти мгновенна.' },
+      { id: 'fc18', track: 'coding', sub: 'Алгоритмы', front: 'Какова временная сложность бинарного поиска и сортировки sort()?', back: 'Бинпоиск: O(log n)  |  sort(): O(n log n)', note: 'Бинпоиск требует отсортированного массива (или монотонной функции).' },
+      { id: 'fc19', track: 'coding', sub: 'Графы', front: 'Какая структура данных используется в BFS и что он находит?', back: 'Очередь (deque); кратчайший путь по числу рёбер', note: 'В отличие от DFS (стек/рекурсия), BFS обходит граф слоями по расстоянию от старта.' },
+      { id: 'fc20', track: 'coding', sub: 'Python 3', front: 'Зачем нужен декоратор @lru_cache(None) из functools?', back: 'Кэширует (мемоизирует) результаты рекурсивной функции', note: 'Превращает экспоненциальную рекурсию O(2ⁿ) в линейную или полиномиальную.' },
+      { id: 'fc21', track: 'coding', sub: 'C++ STL', front: 'Зачем в C++ пишут ios::sync_with_stdio(false); cin.tie(nullptr);?', back: 'Отключает синхронизацию с C-потоками и ускоряет cin/cout', note: 'Критично для олимпиад и лаб с большими входными данными (10⁵+ чисел).' },
+      { id: 'fc22', track: 'coding', sub: 'C++', front: 'Как передать std::vector в функцию без копирования и без изменения?', back: 'const vector<int>& v', note: 'Передача по константной ссылке экономит O(n) памяти и времени.' },
+      { id: 'fc23', track: 'coding', sub: 'Алгоритмы', front: 'Как за O(1) найти сумму элементов на отрезке [L, R]?', back: 'pref[R + 1] − pref[L]', note: 'Префиксные суммы строятся один раз за O(n), после чего каждый запрос занимает O(1).' },
+      { id: 'fc24', track: 'coding', sub: 'Python 3', front: 'Как развернуть строку или список s в Python одной строкой?', back: 's[::-1]', note: 'Срез с шагом −1 создаёт новую перевёрнутую копию.' }
+    ];
+
+    // ==================== DATA: QUIZ QUESTIONS ====================
+    const QUIZ_BANK = [
+      // GRADE 8
+      {
+        id: 'qg8_1', track: 'grade8', topic: '8 класс • 2-я формула (D/4)',
+        question: 'В уравнении 2x² − 12x + 10 = 0 берём k = −6. Чему равен D₁ = D/4 = k² − ac?',
+        options: ['16', '64', '36', '26'],
+        answer: 0,
+        explanation: 'k = b/2 = −6. Тогда D₁ = (−6)² − 2·10 = 36 − 20 = 16. Отсюда x = (6 ± 4)/2 → x₁ = 5, x₂ = 1.'
+      },
+      {
+        id: 'qg8_2', track: 'grade8', topic: '8 класс • Лайфхак корней',
+        question: 'Найдите корни уравнения 7x² − 10x + 3 = 0 без дискриминанта:',
+        options: ['1 и 3/7', '−1 и −3/7', '1 и 7/3', '3 и 7'],
+        answer: 0,
+        explanation: 'Сумма коэффициентов a + b + c = 7 − 10 + 3 = 0 ⇒ сразу x₁ = 1, x₂ = c/a = 3/7!'
+      },
+      {
+        id: 'qg8_3', track: 'grade8', topic: '8 класс • Теорема Виета',
+        question: 'У уравнения x² − 9x + 14 = 0 корни по теореме Виета равны:',
+        options: ['−2 и −7', '2 и 7', '1 и 14', '−1 и 14'],
+        answer: 1,
+        explanation: 'x₁ + x₂ = 9, x₁ · x₂ = 14. Подходят числа 2 и 7 (2 + 7 = 9, 2 · 7 = 14).'
+      },
+      {
+        id: 'qg8_4', track: 'grade8', topic: '8 класс • Геометрия',
+        question: 'Вписанный угол опирается на дугу 84°. Чему равен этот вписанный угол?',
+        options: ['84°', '168°', '42°', '90°'],
+        answer: 2,
+        explanation: 'Вписанный угол равен половине дуги, на которую он опирается: 84° / 2 = 42°.'
+      },
+
+      // VIS
+      {
+        id: 'qvis_1', track: 'vis', topic: 'ВиС 8 кл • Медиана',
+        question: 'Найдите медиану числового набора: 14, 5, 9, 2, 11',
+        options: ['9', '5', '8.2', '11'],
+        answer: 0,
+        explanation: 'Сначала упорядочиваем по возрастанию: 2, 5, 9, 11, 14. Ровно в центре стоит число 9.'
+      },
+      {
+        id: 'qvis_2', track: 'vis', topic: 'ВиС 8 кл • Графы',
+        question: 'В дереве 12 вершин. Сколько в нём рёбер?',
+        options: ['12', '11', '24', '6'],
+        answer: 1,
+        explanation: 'Дерево — связный граф без циклов; в дереве с n вершинами всегда ровно n − 1 = 11 рёбер.'
+      },
+      {
+        id: 'qvis_3', track: 'vis', topic: 'ВиС 8–9 кл • Вероятность',
+        question: 'Монету бросают 2 раза. Какова вероятность, что хотя бы один раз выпадет орёл?',
+        options: ['0.25', '0.5', '0.75', '1'],
+        answer: 2,
+        explanation: 'Противоположное событие «ни одного орла» (РР) имеет вероятность 0.5·0.5 = 0.25. Значит P(≥1 орла) = 1 − 0.25 = 0.75.'
+      },
+
+      // OGE 9
+      {
+        id: 'qoge_1', track: 'oge9', topic: 'ОГЭ Физика • Электричество',
+        question: 'Два резистора по 6 Ом соединены параллельно. Чему равно их общее сопротивление?',
+        options: ['12 Ом', '3 Ом', '6 Ом', '1.5 Ом'],
+        answer: 1,
+        explanation: 'При параллельном соединении R_общ = (R₁·R₂)/(R₁+R₂) = (6·6)/(6+6) = 36/12 = 3 Ом.'
+      },
+      {
+        id: 'qoge_2', track: 'oge9', topic: 'ОГЭ Физика • Механика',
+        question: 'Тело массой 2 кг движется со скоростью 5 м/с. Чему равна его кинетическая энергия?',
+        options: ['10 Дж', '25 Дж', '50 Дж', '5 Дж'],
+        answer: 1,
+        explanation: 'E_к = m·v² / 2 = 2 · 5² / 2 = 25 Дж.'
+      },
+      {
+        id: 'qoge_3', track: 'oge9', topic: 'ОГЭ Физика • Теплота',
+        question: 'По какой формуле вычисляется количество теплоты, необходимое для нагревания тела?',
+        options: ['Q = λm', 'Q = cmΔt', 'Q = qm', 'Q = I²Rt'],
+        answer: 1,
+        explanation: 'Нагревание и охлаждение считаются по формуле Q = c·m·Δt (λm — плавление, qm — сгорание).'
+      },
+      {
+        id: 'qoge_4', track: 'oge9', topic: 'ОГЭ Информатика • Логика',
+        question: 'Найдите наименьшее целое x, для которого истинно: НЕ (x < 7) И (x чётное)',
+        options: ['6', '7', '8', '10'],
+        answer: 2,
+        explanation: 'НЕ (x < 7) означает x ≥ 7. Наименьшее чётное число, которое больше или равно 7, — это 8.'
+      },
+
+      // EGE
+      {
+        id: 'q1', track: 'ege', topic: '10–11 • Производная',
+        question: 'Найдите производную функции f(x) = e²ˣ · x',
+        options: ['e²ˣ(2x + 1)', '2e²ˣ', 'e²ˣ(x + 2)', '2x·e²ˣ'],
+        answer: 0,
+        explanation: 'По правилу произведения (uv)\' = u\'v + uv\': (e²ˣ)\'·x + e²ˣ·(x)\' = 2e²ˣ·x + e²ˣ·1 = e²ˣ(2x + 1).'
+      },
+      {
+        id: 'q2', track: 'ege', topic: '10–11 • Логарифмы',
+        question: 'Вычислите значение выражения: log₄(8) + log₄(2)',
+        options: ['1', '2', '3', '4'],
+        answer: 1,
+        explanation: 'Сумма логарифмов с одинаковым основанием равна логарифму произведения: log₄(8·2) = log₄(16) = 2.'
+      },
+      {
+        id: 'q3', track: 'ege', topic: '10–11 • Тригонометрия',
+        question: 'Упростите выражение: cos(π/2 + α)',
+        options: ['sin α', '−sin α', 'cos α', '−cos α'],
+        answer: 1,
+        explanation: 'В точке π/2 функция меняется на sin α. Угол π/2 + α лежит во 2-й четверти, где исходный cos отрицателен ⇒ −sin α.'
+      },
+      {
+        id: 'q4', track: 'ege', topic: '10–11 • Стереометрия',
+        question: 'Радиус шара увеличили в 3 раза. Во сколько раз увеличился его объём?',
+        options: ['В 3 раза', 'В 9 раз', 'В 27 раз', 'В 12 раз'],
+        answer: 2,
+        explanation: 'Объём пропорционален кубу линейных размеров: V = (4/3)πR³. При увеличении R в 3 раза объём растёт в 3³ = 27 раз.'
+      },
+      // MIREA
+      {
+        id: 'q5', track: 'mirea', topic: 'МИРЭА • Линейная алгебра',
+        question: 'Чему равен определитель матрицы A = [[3, 2], [5, 4]]?',
+        options: ['2', '22', '−2', '7'],
+        answer: 0,
+        explanation: 'Определитель 2×2 равен a₁₁a₂₂ − a₁₂a₂₁ = 3·4 − 2·5 = 12 − 10 = 2.'
+      },
+      {
+        id: 'q6', track: 'mirea', topic: 'МИРЭА • Пределы',
+        question: 'Вычислите предел: lim(x → 0) (sin 5x) / (2x)',
+        options: ['0', '1', '5/2', '2/5'],
+        answer: 2,
+        explanation: 'При x → 0 имеем эквивалентность sin(5x) ~ 5x. Значит lim (5x / 2x) = 5/2.'
+      },
+      {
+        id: 'q7', track: 'mirea', topic: 'МИРЭА • Интегралы',
+        question: 'Найдите неопределённый интеграл ∫ (1 / x) dx',
+        options: ['−1/x² + C', 'ln|x| + C', 'x⁰ + C', 'eˣ + C'],
+        answer: 1,
+        explanation: 'Это табличный интеграл: производная от ln|x| равна 1/x (при x ≠ 0).'
+      },
+      {
+        id: 'q8', track: 'mirea', topic: 'МИРЭА • СЛАУ',
+        question: 'Когда СЛАУ имеет единственное решение по теореме Кронекера–Капелли (n неизвестных)?',
+        options: ['rank(A) < rank(A|B)', 'rank(A) = rank(A|B) < n', 'rank(A) = rank(A|B) = n', 'det(A) = 0'],
+        answer: 2,
+        explanation: 'Система совместна при rank(A) = rank(A|B), а решение единственно, если этот ранг равен числу неизвестных n.'
+      },
+      // CODING
+      {
+        id: 'q9', track: 'coding', topic: 'Кодинг • Python 3',
+        question: 'Что выведет этот код на Python?',
+        code: 'nums = [10, 20, 30, 40, 50]\nprint(nums[1:4][::-1])',
+        options: ['[40, 30, 20]', '[50, 40, 30]', '[30, 20, 10]', '[20, 30, 40]'],
+        answer: 0,
+        explanation: 'Срез nums[1:4] берёт элементы с индексами 1, 2, 3 → [20, 30, 40]. Затем [::-1] разворачивает его в [40, 30, 20].'
+      },
+      {
+        id: 'q10', track: 'coding', topic: 'Кодинг • Алгоритмы',
+        question: 'Какую сложность имеет бинарный поиск в отсортированном массиве из N элементов?',
+        options: ['O(1)', 'O(log N)', 'O(N)', 'O(N log N)'],
+        answer: 1,
+        explanation: 'На каждом шаге область поиска делится пополам, поэтому требуется не более ⌈log₂ N⌉ сравнений.'
+      },
+      {
+        id: 'q11', track: 'coding', topic: 'Кодинг • Графы',
+        question: 'Какой алгоритм гарантированно находит кратчайший путь в невзвешенном графе?',
+        options: ['DFS (поиск в глубину)', 'BFS (поиск в ширину)', 'Пузырьковая сортировка', 'Бинарный поиск'],
+        answer: 1,
+        explanation: 'BFS обходит вершины по возрастанию расстояния (в рёбрах) от стартовой вершины с помощью очереди.'
+      },
+      {
+        id: 'q12', track: 'coding', topic: 'Кодинг • C++',
+        question: 'Какой контейнер STL в C++ обеспечивает поиск по ключу в среднем за O(1)?',
+        options: ['std::vector', 'std::list', 'std::unordered_map', 'std::queue'],
+        answer: 2,
+        explanation: 'std::unordered_map реализован на хэш-таблице (среднее O(1)), тогда как std::map — на красно-чёрном дереве (O(log n)).'
+      }
+    ];
+
+
+    // ==================== DATA: WRITTEN PRACTICE TASKS ====================
+    const WRITTEN_TASKS = [
+      {
+        id: 'wr_g8_1',
+        track: 'grade8',
+        sub: '8 класс • 2-я формула (D/4)',
+        question: 'Реши уравнение 3x² − 14x + 8 = 0 с помощью 2-й формулы дискриминанта (D/4). Запиши шаги, корни и объясни, почему здесь удобнее D/4.',
+        hint: 'Коэффициент b = −14 чётный, значит k = b/2 = −7. Используй D₁ = k² − ac и x = (−k ± √D₁) / a.',
+        answers: ['4; 2/3', '2/3; 4', '4, 2/3', '2/3, 4', '4 и 2/3', '2/3 и 4'],
+        refSolution: 'a = 3, b = −14 (чётное ⇒ k = −7), c = 8\nD₁ = k² − ac = (−7)² − 3·8 = 49 − 24 = 25\n√D₁ = 5\nx₁ = (7 + 5) / 3 = 12 / 3 = 4\nx₂ = (7 − 5) / 3 = 2 / 3',
+        refAnswer: '4; 2/3',
+        refExplain: 'Так как b делится на 2, формула D₁ = k² − ac даёт числа в 4 раза меньше (25 вместо 100), а в знаменателе стоит просто a = 3 вместо 2a = 6.'
+      },
+      {
+        id: 'wr_g8_2',
+        track: 'grade8',
+        sub: '8 класс • Лайфхак / Виета',
+        question: 'Найди корни уравнения 5x² − 7x + 2 = 0 без вычисления дискриминанта и объясни правило.',
+        hint: 'Проверь сумму коэффициентов a + b + c.',
+        answers: ['1; 0.4', '0.4; 1', '1; 2/5', '2/5; 1', '1, 0.4', '0.4, 1', '1, 2/5', '2/5, 1'],
+        refSolution: 'Проверяем сумму коэффициентов: a + b + c = 5 + (−7) + 2 = 0.\nПо свойству коэффициентов сразу получаем:\nx₁ = 1\nx₂ = c / a = 2 / 5 = 0.4',
+        refAnswer: '1; 0.4 (или 2/5)',
+        refExplain: 'Если подставить x = 1 в ax² + bx + c, получится a + b + c. Раз эта сумма равна 0, то x = 1 точно корень, а второй корень находим из произведения по Виета: x₁·x₂ = c/a ⇒ x₂ = c/a.'
+      },
+      {
+        id: 'wr_vis_1',
+        track: 'vis',
+        sub: 'ВиС 8 класс • Статистика',
+        question: 'Дан ряд чисел: 18, 4, 10, 6, 12. Найди среднее арифметическое, медиану и размах. В ответ запиши их через точку с запятой (среднее; медиана; размах).',
+        hint: 'Для медианы сначала отсортируй числа от меньшего к большему!',
+        answers: ['10; 10; 14', '10, 10, 14', '10 10 14'],
+        refSolution: '1) Упорядочим ряд: 4, 6, 10, 12, 18\n2) Среднее: (4 + 6 + 10 + 12 + 18) / 5 = 50 / 5 = 10\n3) Медиана (средний элемент): 10\n4) Размах: max − min = 18 − 4 = 14',
+        refAnswer: '10; 10; 14',
+        refExplain: 'Среднее показывает общий баланс, медиана — центр отсортированного ряда (она устойчива к выбросам), а размах — ширину разброса от минимума до максимума.'
+      },
+      {
+        id: 'wr_vis_2',
+        track: 'vis',
+        sub: 'ВиС 8 класс • Множества',
+        question: 'В классе 25 учеников: 16 занимаются Python, 12 — физикой, а 5 не ходят ни туда, ни туда. Сколько учеников занимаются И Python, И физикой?',
+        hint: 'Сначала найди, сколько всего учеников ходят хотя бы на один кружок: |A ∪ B| = 25 − 5 = 20. Затем примени формулу включений-исключений.',
+        answers: ['8'],
+        refSolution: 'Всего на кружки ходят: |A ∪ B| = 25 − 5 = 20 чел.\nПо формуле |A ∪ B| = |A| + |B| − |A ∩ B|:\n20 = 16 + 12 − |A ∩ B|\n|A ∩ B| = 28 − 20 = 8',
+        refAnswer: '8',
+        refExplain: 'Если просто сложить 16 + 12 = 28, те, кто ходит в оба кружка, посчитаются дважды. Разница 28 − 20 = 8 и есть пересечение множеств.'
+      },
+      {
+        id: 'wr_oge_1',
+        track: 'oge9',
+        sub: 'ОГЭ Физика • Механика',
+        question: 'Автомобиль разгоняется с места (v₀ = 0) с ускорением a = 2 м/с² в течение 6 секунд. Какой путь S (в метрах) он пройдёт?',
+        hint: 'Используй формулу пути при равноускоренном движении S = v₀t + a·t² / 2.',
+        answers: ['36', '36 м', '36м'],
+        refSolution: 'Дано: v₀ = 0, a = 2 м/с², t = 6 с.\nS = v₀·t + (a·t²) / 2 = 0 + (2 · 6²) / 2 = 36 м',
+        refAnswer: '36 м',
+        refExplain: 'Поскольку движение начинается из состояния покоя (v₀ = 0), первое слагаемое обнуляется, а квадрат времени 6² = 36 умножается на a/2 = 1.'
+      },
+      {
+        id: 'wr_oge_2',
+        track: 'oge9',
+        sub: 'ОГЭ Физика • Электричество',
+        question: 'К батарейке напряжением U = 12 В подключили резистор сопротивлением R = 4 Ом. Найди силу тока I (в Амперах) и мощность P (в Ваттах). Запиши через точку с запятой: I; P.',
+        hint: 'Закон Ома I = U / R, мощность P = U · I.',
+        answers: ['3; 36', '3, 36', '3 А; 36 Вт', '3 36'],
+        refSolution: 'I = U / R = 12 / 4 = 3 А\nP = U · I = 12 · 3 = 36 Вт',
+        refAnswer: '3; 36 (3 А и 36 Вт)',
+        refExplain: 'Сила тока прямо пропорциональна напряжению и обратно пропорциональна сопротивлению. Зная U и I, мощность сразу находим как их произведение.'
+      },
+      {
+        id: 'wr_ege_1',
+        track: 'ege',
+        sub: '10–11 Профиль • Производная',
+        question: 'Найди точку минимума функции f(x) = x² − 6x + 11 с помощью производной.',
+        hint: "Возьми производную f'(x), приравняй к 0 и проверь смену знака с «−» на «+».",
+        answers: ['3', 'x=3', 'x = 3'],
+        refSolution: "f'(x) = 2x − 6\n2x − 6 = 0 ⇒ x = 3\nПри x < 3: f'(x) < 0 (убывает)\nПри x > 3: f'(x) > 0 (возрастает)\nЗначит x = 3 — точка минимума.",
+        refAnswer: '3',
+        refExplain: 'В точке минимума производная равна нулю и меняет знак с минуса на плюс (график шёл вниз, а потом пошёл вверх).'
+      },
+      {
+        id: 'wr_mirea_1',
+        track: 'mirea',
+        sub: '1 курс МИРЭА • Пределы',
+        question: 'Вычисли предел lim(x → 0) (1 − cos x) / x² с помощью таблицы эквивалентностей.',
+        hint: 'При x → 0 вспомни эквивалентность для 1 − cos x.',
+        answers: ['0.5', '1/2', '0,5'],
+        refSolution: 'При x → 0: 1 − cos x ~ x² / 2.\nПодставляем в дробь (это частное, замена законна):\nlim(x → 0) (x² / 2) / x² = 1/2 = 0.5',
+        refAnswer: '0.5 (или 1/2)',
+        refExplain: 'В числителе и знаменателе бесконечно малые одного порядка (неопределённость 0/0). Замена 1 − cos x на x²/2 сразу сокращает x².'
+      },
+      {
+        id: 'wr_code_1',
+        track: 'coding',
+        sub: 'Кодинг • Python 3',
+        question: 'Напиши в «Ходе решения» строку Python (list comprehension), которая из списка a = [1, 2, 3, 4, 5, 6] оставит квадраты только чётных чисел, а в «Ответ» запиши итоговый список.',
+        hint: 'Формат: [x**2 for x in a if x % 2 == 0].',
+        answers: ['[4, 16, 36]', '[4,16,36]', '4, 16, 36'],
+        refSolution: 'a = [1, 2, 3, 4, 5, 6]\nres = [x**2 for x in a if x % 2 == 0]\n# Чётные: 2, 4, 6 → квадраты: 4, 16, 36',
+        refAnswer: '[4, 16, 36]',
+        refExplain: 'Условие if x % 2 == 0 фильтрует только чётные числа (остаток от деления на 2 равен 0), а x**2 возводит каждое подходящее число в квадрат.'
+      }
+    ];
+
+    // ==================== STATE & STORAGE ====================
+    const STORAGE_KEY = 'mirea_math_code_state_v1';
+    let state = {
+      mode: 'cheatsheet',
+      trackFilter: 'all',
+      search: '',
+      onlyBookmarks: false,
+      onlyUnstudied: false,
+      studied: [],
+      bookmarks: [],
+      fcFilter: 'all',
+      fcKnown: [],
+      fcOrder: FLASHCARDS.map(c => c.id),
+      fcIndex: 0,
+      fcFlipped: false,
+      quizTrack: 'all',
+      quizQuestions: [],
+      quizIdx: 0,
+      quizScore: 0,
+      quizStreak: 0,
+      quizAnswered: false,
+      quizMistakes: [],
+      wrTrack: 'all',
+      wrIndex: 0,
+      wrNotes: {},
+      wrSolved: [],
+      xp: 0,
+      theme: 'dark'
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const saved = JSON.parse(raw);
+          state.studied = Array.isArray(saved.studied) ? saved.studied : [];
+          state.bookmarks = Array.isArray(saved.bookmarks) ? saved.bookmarks : [];
+          state.fcKnown = Array.isArray(saved.fcKnown) ? saved.fcKnown : [];
+          state.wrNotes = saved.wrNotes && typeof saved.wrNotes === 'object' ? saved.wrNotes : {};
+          state.wrSolved = Array.isArray(saved.wrSolved) ? saved.wrSolved : [];
+          state.xp = typeof saved.xp === 'number' ? saved.xp : 0;
+          state.theme = saved.theme === 'light' ? 'light' : 'dark';
+        }
+      } catch (e) {}
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          studied: state.studied,
+          bookmarks: state.bookmarks,
+          fcKnown: state.fcKnown,
+          wrNotes: state.wrNotes,
+          wrSolved: state.wrSolved,
+          xp: state.xp,
+          theme: state.theme
+        }));
+      } catch (e) {}
+    }
+
+    // ==================== UTILITIES ====================
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = msg;
+      el.classList.remove('translate-y-20', 'opacity-0');
+      el.classList.add('translate-y-0', 'opacity-100');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.add('translate-y-20', 'opacity-0');
+        el.classList.remove('translate-y-0', 'opacity-100');
+      }, 2200);
+    }
+
+    function copyText(text, label = 'Скопировано в буфер') {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast(label)).catch(() => fallbackCopy(text, label));
+      } else {
+        fallbackCopy(text, label);
+      }
+    }
+
+    function fallbackCopy(text, label) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast(label); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    function trackMeta(track) {
+      if (track === 'grade8') return { label: '8 класс', badge: 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20' };
+      if (track === 'vis') return { label: 'ВиС 8–11', badge: 'bg-violet-500/15 text-violet-600 dark:text-violet-400 border-violet-500/20' };
+      if (track === 'oge9') return { label: '9 кл • ОГЭ', badge: 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/20' };
+      if (track === 'ege') return { label: '10–11 Профиль', badge: 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/20' };
+      if (track === 'mirea') return { label: '1 курс МИРЭА', badge: 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/20' };
+      return { label: 'Кодинг', badge: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' };
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function addXP(amount) {
+      state.xp += amount;
+      document.getElementById('header-xp').textContent = `${state.xp} XP`;
+      saveState();
+    }
+
+    // ==================== THEME & NAVIGATION ====================
+    function applyTheme() {
+      const root = document.documentElement;
+      if (state.theme === 'dark') {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+      const icon = document.getElementById('theme-icon');
+      icon.setAttribute('data-lucide', state.theme === 'dark' ? 'sun' : 'moon');
+      if (window.lucide) lucide.createIcons();
+      if (state.mode === 'tools') drawGraph();
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      ['cheatsheet', 'flashcards', 'quiz', 'written', 'tools'].forEach(m => {
+        const el = document.getElementById(`view-${m}`);
+        if (m === mode) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+      });
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        const active = btn.dataset.mode === mode;
+        btn.classList.toggle('bg-indigo-600', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('shadow-sm', active);
+        btn.classList.toggle('text-slate-600', !active);
+        btn.classList.toggle('dark:text-slate-300', !active);
+      });
+      if (mode === 'tools') {
+        requestAnimationFrame(() => drawGraph());
+      }
+    }
+
+    function updateProgressBars() {
+      ['grade8', 'vis', 'oge9', 'ege', 'mirea', 'coding'].forEach(tr => {
+        const total = TOPICS.filter(t => t.track === tr).length;
+        const done = TOPICS.filter(t => t.track === tr && state.studied.includes(t.id)).length;
+        const pct = total ? Math.round((done / total) * 100) : 0;
+        document.getElementById(`stat-${tr}-text`).textContent = `${done}/${total} (${pct}%)`;
+        document.getElementById(`stat-${tr}-bar`).style.width = `${pct}%`;
+      });
+      document.getElementById('header-xp').textContent = `${state.xp} XP`;
+    }
+
+    // ==================== VIEW 1: CHEAT SHEET ====================
+    function renderCheatsheet() {
+      // Update filter pills
+      document.querySelectorAll('.track-filter-btn').forEach(btn => {
+        const active = btn.dataset.filter === state.trackFilter;
+        btn.classList.toggle('bg-indigo-600', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('bg-slate-100', !active);
+        btn.classList.toggle('dark:bg-slate-800', !active);
+        btn.classList.toggle('text-slate-700', !active);
+        btn.classList.toggle('dark:text-slate-300', !active);
+      });
+
+      const bmBtn = document.getElementById('filter-bookmarks');
+      bmBtn.classList.toggle('bg-amber-500/15', state.onlyBookmarks);
+      bmBtn.classList.toggle('border-amber-500/40', state.onlyBookmarks);
+      bmBtn.classList.toggle('text-amber-600', state.onlyBookmarks);
+      bmBtn.classList.toggle('dark:text-amber-400', state.onlyBookmarks);
+
+      const unBtn = document.getElementById('filter-unstudied');
+      unBtn.classList.toggle('bg-indigo-500/15', state.onlyUnstudied);
+      unBtn.classList.toggle('border-indigo-500/40', state.onlyUnstudied);
+      unBtn.classList.toggle('text-indigo-600', state.onlyUnstudied);
+      unBtn.classList.toggle('dark:text-indigo-400', state.onlyUnstudied);
+
+      const q = state.search.trim().toLowerCase();
+      document.getElementById('clear-search').classList.toggle('hidden', !q);
+
+      const filtered = TOPICS.filter(t => {
+        if (state.trackFilter !== 'all' && t.track !== state.trackFilter) return false;
+        if (state.onlyBookmarks && !state.bookmarks.includes(t.id)) return false;
+        if (state.onlyUnstudied && state.studied.includes(t.id)) return false;
+        if (q) {
+          const hay = [
+            t.title, t.subtitle, t.example,
+            ...(t.tags || []),
+            ...(t.formulas ? t.formulas.map(f => f.label + ' ' + f.value) : []),
+            t.code || ''
+          ].join(' ').toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const grid = document.getElementById('cheatsheet-grid');
+      const empty = document.getElementById('cheatsheet-empty');
+
+      if (!filtered.length) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(topic => {
+        const meta = trackMeta(topic.track);
+        const isStudied = state.studied.includes(topic.id);
+        const isBookmarked = state.bookmarks.includes(topic.id);
+
+        let bodyHtml = '';
+        if (topic.formulas) {
+          bodyHtml = `<div class="space-y-2">` + topic.formulas.map((f, idx) => `
+            <div class="group relative p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800/80">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">${escapeHtml(f.label)}</span>
+                <button data-copy-formula="${topic.id}:${idx}" class="opacity-70 hover:opacity-100 text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 transition-opacity" title="Копировать формулу">
+                  <i data-lucide="copy" class="w-3 h-3"></i> Копировать
+                </button>
+              </div>
+              <div class="math-formula text-xs sm:text-[13px] text-slate-800 dark:text-slate-100 whitespace-pre-wrap leading-relaxed">${escapeHtml(f.value)}</div>
+            </div>
+          `).join('') + `</div>`;
+        } else if (topic.code) {
+          bodyHtml = `
+            <div class="relative rounded-xl bg-slate-900 text-slate-100 border border-slate-800 overflow-hidden">
+              <div class="flex items-center justify-between px-3.5 py-2 bg-slate-950/60 border-b border-slate-800">
+                <span class="text-[11px] font-mono text-slate-400">${topic.id.includes('cpp') ? 'C++17 / STL' : 'Python 3'}</span>
+                <button data-copy-code="${topic.id}" class="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 transition-colors">
+                  <i data-lucide="copy" class="w-3 h-3"></i> Копировать код
+                </button>
+              </div>
+              <pre class="code-block scrollbar-thin text-xs p-3.5 leading-relaxed text-slate-100">${escapeHtml(topic.code)}</pre>
+            </div>
+          `;
+        }
+
+        return `
+          <article class="rounded-3xl border ${isStudied ? 'border-emerald-500/40' : 'border-slate-200 dark:border-slate-800'} bg-white dark:bg-slate-900/90 p-5 flex flex-col justify-between gap-4 shadow-sm hover:shadow-md transition-all">
+            <div class="space-y-3.5">
+              <div class="flex items-start justify-between gap-2">
+                <div class="space-y-1 min-w-0">
+                  <span class="inline-flex items-center text-[11px] font-bold px-2.5 py-0.5 rounded-lg border ${meta.badge}">${meta.label}</span>
+                  <h3 class="text-base sm:text-lg font-extrabold leading-snug">${escapeHtml(topic.title)}</h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">${escapeHtml(topic.subtitle)}</p>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button data-toggle-bookmark="${topic.id}" class="p-2 rounded-xl border transition-colors ${isBookmarked ? 'bg-amber-500/15 border-amber-500/40 text-amber-500' : 'border-slate-200 dark:border-slate-800 text-slate-400 hover:text-amber-500'}" title="В избранное">
+                    <i data-lucide="bookmark" class="w-4 h-4"></i>
+                  </button>
+                  <button data-toggle-studied="${topic.id}" class="p-2 rounded-xl border transition-colors ${isStudied ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-500' : 'border-slate-200 dark:border-slate-800 text-slate-400 hover:text-emerald-500'}" title="${isStudied ? 'Изучено' : 'Отметить изученным'}">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              ${bodyHtml}
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200/60 dark:border-indigo-500/20 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+              <span class="font-bold text-indigo-700 dark:text-indigo-300">Разбор и совет: </span>${escapeHtml(topic.example)}
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // ==================== VIEW 2: FLASHCARDS ====================
+    function getFilteredFlashcards() {
+      const byId = Object.fromEntries(FLASHCARDS.map(c => [c.id, c]));
+      return state.fcOrder
+        .map(id => byId[id])
+        .filter(c => c && (state.fcFilter === 'all' || c.track === state.fcFilter));
+    }
+
+    function renderFlashcards() {
+      document.querySelectorAll('.fc-filter-btn').forEach(btn => {
+        const active = btn.dataset.fcFilter === state.fcFilter;
+        btn.classList.toggle('bg-indigo-600', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('bg-slate-100', !active);
+        btn.classList.toggle('dark:bg-slate-800', !active);
+        btn.classList.toggle('text-slate-700', !active);
+        btn.classList.toggle('dark:text-slate-300', !active);
+      });
+
+      const list = getFilteredFlashcards();
+      if (!list.length) return;
+      if (state.fcIndex >= list.length) state.fcIndex = 0;
+      if (state.fcIndex < 0) state.fcIndex = list.length - 1;
+
+      const card = list[state.fcIndex];
+      const meta = trackMeta(card.track);
+      const isKnown = state.fcKnown.includes(card.id);
+
+      document.getElementById('fc-counter').textContent = `${state.fcIndex + 1} / ${list.length}`;
+      const badge = document.getElementById('fc-badge');
+      badge.textContent = `${meta.label} • ${card.sub}`;
+      badge.className = `text-xs font-bold px-2.5 py-1 rounded-lg border ${meta.badge}`;
+      document.getElementById('fc-known-pill').classList.toggle('hidden', !isKnown);
+      document.getElementById('fc-front').textContent = card.front;
+      document.getElementById('fc-subtag').textContent = card.sub;
+      document.getElementById('fc-back-main').textContent = card.back;
+      document.getElementById('fc-back-note').textContent = card.note;
+
+      const inner = document.getElementById('fc-inner');
+      inner.classList.toggle('is-flipped', state.fcFlipped);
+    }
+
+    // ==================== VIEW 3: QUIZ ====================
+    function startQuiz(track = state.quizTrack, customList = null) {
+      state.quizTrack = track;
+      let pool = customList || QUIZ_BANK.filter(q => track === 'all' || q.track === track);
+      // Shuffle copy
+      state.quizQuestions = [...pool].sort(() => Math.random() - 0.5);
+      state.quizIdx = 0;
+      state.quizScore = 0;
+      state.quizStreak = 0;
+      state.quizAnswered = false;
+      state.quizMistakes = [];
+
+      document.getElementById('quiz-card').classList.remove('hidden');
+      document.getElementById('quiz-result').classList.add('hidden');
+      renderQuiz();
+    }
+
+    function renderQuiz() {
+      document.querySelectorAll('.quiz-track-btn').forEach(btn => {
+        const active = btn.dataset.quizTrack === state.quizTrack;
+        btn.classList.toggle('bg-indigo-600', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('bg-slate-100', !active);
+        btn.classList.toggle('dark:bg-slate-800', !active);
+        btn.classList.toggle('text-slate-700', !active);
+        btn.classList.toggle('dark:text-slate-300', !active);
+      });
+
+      const q = state.quizQuestions[state.quizIdx];
+      if (!q) return;
+
+      document.getElementById('quiz-progress-label').textContent = `Вопрос ${state.quizIdx + 1} / ${state.quizQuestions.length}`;
+      document.getElementById('quiz-score-label').textContent = `Счёт: ${state.quizScore}`;
+
+      const streakEl = document.getElementById('quiz-streak-badge');
+      if (state.quizStreak >= 2) {
+        streakEl.textContent = `🔥 Серия: ${state.quizStreak}`;
+        streakEl.classList.remove('hidden');
+      } else {
+        streakEl.classList.add('hidden');
+      }
+
+      const meta = trackMeta(q.track);
+      const topicBadge = document.getElementById('quiz-topic-badge');
+      topicBadge.textContent = q.topic;
+      topicBadge.className = `text-xs font-bold px-2.5 py-1 rounded-lg border ${meta.badge}`;
+
+      document.getElementById('quiz-question').textContent = q.question;
+      const codeEl = document.getElementById('quiz-code');
+      if (q.code) {
+        codeEl.textContent = q.code;
+        codeEl.classList.remove('hidden');
+      } else {
+        codeEl.classList.add('hidden');
+      }
+
+      const optsEl = document.getElementById('quiz-options');
+      optsEl.innerHTML = q.options.map((opt, idx) => `
+        <button data-quiz-opt="${idx}" class="quiz-opt-btn text-left p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:border-indigo-500 hover:bg-indigo-500/5 transition-all font-mono text-sm font-semibold flex items-center gap-3">
+          <span class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-800 text-xs flex items-center justify-center shrink-0 font-bold">${String.fromCharCode(65 + idx)}</span>
+          <span>${escapeHtml(opt)}</span>
+        </button>
+      `).join('');
+
+      document.getElementById('quiz-feedback').classList.add('hidden');
+      document.getElementById('quiz-next-btn').classList.add('hidden');
+    }
+
+    function handleQuizAnswer(selectedIdx) {
+      if (state.quizAnswered) return;
+      state.quizAnswered = true;
+      const q = state.quizQuestions[state.quizIdx];
+      const isRight = selectedIdx === q.answer;
+
+      if (isRight) {
+        state.quizScore++;
+        state.quizStreak++;
+        addXP(15);
+      } else {
+        state.quizStreak = 0;
+        state.quizMistakes.push(q);
+      }
+
+      document.getElementById('quiz-score-label').textContent = `Счёт: ${state.quizScore}`;
+
+      document.querySelectorAll('.quiz-opt-btn').forEach(btn => {
+        const idx = Number(btn.dataset.quizOpt);
+        btn.disabled = true;
+        btn.classList.remove('hover:border-indigo-500', 'hover:bg-indigo-500/5');
+        if (idx === q.answer) {
+          btn.classList.add('border-emerald-500', 'bg-emerald-500/15', 'text-emerald-700', 'dark:text-emerald-300');
+        } else if (idx === selectedIdx && !isRight) {
+          btn.classList.add('border-rose-500', 'bg-rose-500/15', 'text-rose-700', 'dark:text-rose-300');
+        } else {
+          btn.classList.add('opacity-50');
+        }
+      });
+
+      const fb = document.getElementById('quiz-feedback');
+      fb.className = `p-4 rounded-2xl text-sm leading-relaxed border ${
+        isRight
+          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-200'
+          : 'bg-rose-500/10 border-rose-500/30 text-rose-800 dark:text-rose-200'
+      }`;
+      fb.innerHTML = `<div class="font-bold mb-1">${isRight ? 'Верно! +15 XP' : 'Не совсем так'}</div><div>${escapeHtml(q.explanation)}</div>`;
+      fb.classList.remove('hidden');
+
+      const nextBtn = document.getElementById('quiz-next-btn');
+      nextBtn.innerHTML = state.quizIdx < state.quizQuestions.length - 1
+        ? 'Следующий вопрос <i data-lucide="arrow-right" class="w-4 h-4"></i>'
+        : 'Показать результат <i data-lucide="trophy" class="w-4 h-4"></i>';
+      nextBtn.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function showQuizResult() {
+      document.getElementById('quiz-card').classList.add('hidden');
+      document.getElementById('quiz-result').classList.remove('hidden');
+      const total = state.quizQuestions.length || 1;
+      const pct = Math.round((state.quizScore / total) * 100);
+      document.getElementById('quiz-result-percent').textContent = `${pct}%`;
+      document.getElementById('quiz-result-title').textContent =
+        pct >= 85 ? 'Мощно! Уровень МИРЭА!' : pct >= 55 ? 'Хорошая база!' : 'Нужно ещё потренироваться';
+      document.getElementById('quiz-result-desc').textContent =
+        `Ты ответил правильно на ${state.quizScore} из ${total} вопросов. ${state.quizMistakes.length ? 'Можно сразу разобрать допущенные ошибки.' : 'Без единой ошибки!'}`;
+      document.getElementById('quiz-retry-mistakes-btn').classList.toggle('hidden', state.quizMistakes.length === 0);
+    }
+
+    // ==================== VIEW 5: WRITTEN PRACTICE ====================
+    let lastFocusedWrField = null;
+
+    function getFilteredWrittenTasks() {
+      return WRITTEN_TASKS.filter(t => state.wrTrack === 'all' || t.track === state.wrTrack);
+    }
+
+    function normalizeAns(str) {
+      return String(str || '')
+        .toLowerCase()
+        .replace(/,/g, '.')
+        .replace(/\s+/g, ' ')
+        .replace(/\s*;\s*/g, ';')
+        .trim();
+    }
+
+    function renderWritten() {
+      document.querySelectorAll('.wr-track-btn').forEach(btn => {
+        const active = btn.dataset.wrTrack === state.wrTrack;
+        btn.classList.toggle('bg-indigo-600', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('bg-slate-100', !active);
+        btn.classList.toggle('dark:bg-slate-800', !active);
+        btn.classList.toggle('text-slate-700', !active);
+        btn.classList.toggle('dark:text-slate-300', !active);
+      });
+
+      const list = getFilteredWrittenTasks();
+      if (!list.length) return;
+      if (state.wrIndex >= list.length) state.wrIndex = 0;
+      if (state.wrIndex < 0) state.wrIndex = list.length - 1;
+
+      const task = list[state.wrIndex];
+      const meta = trackMeta(task.track);
+      const saved = state.wrNotes[task.id] || { steps: '', answer: '', explain: '' };
+      const isSolved = state.wrSolved.includes(task.id);
+
+      document.getElementById('wr-counter').textContent = `${state.wrIndex + 1} / ${list.length}`;
+      const badge = document.getElementById('wr-badge');
+      badge.textContent = task.sub;
+      badge.className = `text-xs font-bold px-2.5 py-1 rounded-lg border ${meta.badge}`;
+      document.getElementById('wr-solved-pill').classList.toggle('hidden', !isSolved);
+      document.getElementById('wr-question').textContent = task.question;
+
+      const hintBox = document.getElementById('wr-hint-box');
+      hintBox.textContent = `Подсказка: ${task.hint}`;
+      hintBox.classList.add('hidden');
+
+      document.getElementById('wr-steps').value = saved.steps || '';
+      document.getElementById('wr-answer').value = saved.answer || '';
+      document.getElementById('wr-explain').value = saved.explain || '';
+      document.getElementById('wr-result-box').classList.add('hidden');
+
+      renderNotebookList();
+    }
+
+    function saveCurrentWrittenNote(silent = false) {
+      const list = getFilteredWrittenTasks();
+      const task = list[state.wrIndex];
+      if (!task) return;
+      const steps = document.getElementById('wr-steps').value.trim();
+      const answer = document.getElementById('wr-answer').value.trim();
+      const explain = document.getElementById('wr-explain').value.trim();
+      if (!steps && !answer && !explain) {
+        delete state.wrNotes[task.id];
+      } else {
+        state.wrNotes[task.id] = { steps, answer, explain, updatedAt: Date.now() };
+      }
+      saveState();
+      renderNotebookList();
+      if (!silent) showToast('Запись сохранена в тетрадь');
+    }
+
+    function checkCurrentWritten() {
+      const list = getFilteredWrittenTasks();
+      const task = list[state.wrIndex];
+      if (!task) return;
+      saveCurrentWrittenNote(true);
+
+      const userAns = normalizeAns(document.getElementById('wr-answer').value);
+      const matched = userAns && task.answers.some(a => normalizeAns(a) === userAns);
+
+      const box = document.getElementById('wr-result-box');
+      const statusEl = document.getElementById('wr-check-status');
+      if (matched) {
+        box.className = 'rounded-3xl border border-emerald-500/40 bg-emerald-500/10 p-5 sm:p-6 space-y-3 shadow-sm';
+        statusEl.textContent = '✅ Ответ совпал! Сравни свой ход решения и объяснение с эталоном:';
+        statusEl.className = 'font-extrabold text-sm sm:text-base text-emerald-700 dark:text-emerald-300';
+      } else if (!userAns) {
+        box.className = 'rounded-3xl border border-indigo-500/30 bg-indigo-500/10 p-5 sm:p-6 space-y-3 shadow-sm';
+        statusEl.textContent = '📖 Открыт эталон для разбора:';
+        statusEl.className = 'font-extrabold text-sm sm:text-base text-indigo-700 dark:text-indigo-300';
+      } else {
+        box.className = 'rounded-3xl border border-amber-500/40 bg-amber-500/10 p-5 sm:p-6 space-y-3 shadow-sm';
+        statusEl.textContent = '🧐 Ответ отличается от эталона — проверь шаги ниже:';
+        statusEl.className = 'font-extrabold text-sm sm:text-base text-amber-700 dark:text-amber-300';
+      }
+
+      document.getElementById('wr-ref-solution').textContent = task.refSolution;
+      document.getElementById('wr-ref-answer').textContent = `Ответ: ${task.refAnswer}`;
+      document.getElementById('wr-ref-explain').textContent = task.refExplain;
+      box.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderNotebookList() {
+      const container = document.getElementById('wr-notebook-list');
+      const entries = Object.entries(state.wrNotes)
+        .map(([id, note]) => ({ task: WRITTEN_TASKS.find(t => t.id === id), note }))
+        .filter(x => x.task)
+        .sort((a, b) => (b.note.updatedAt || 0) - (a.note.updatedAt || 0));
+
+      document.getElementById('wr-saved-count').textContent = String(entries.length);
+
+      if (!entries.length) {
+        container.innerHTML = '<div class="text-xs text-slate-400 py-6 text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">Пока пусто. Напиши решение слева и нажми «Сохранить в тетрадь».</div>';
+        return;
+      }
+
+      container.innerHTML = entries.map(({ task, note }) => {
+        const solved = state.wrSolved.includes(task.id);
+        return `
+          <button data-open-note="${task.id}" class="w-full text-left p-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:border-indigo-500/60 transition-all space-y-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 truncate">${escapeHtml(task.sub)}</span>
+              ${solved ? '<span class="text-[10px] font-bold text-emerald-500 shrink-0">✓ Зачтено</span>' : ''}
+            </div>
+            <div class="text-xs font-semibold text-slate-800 dark:text-slate-200 line-clamp-2">${escapeHtml(task.question)}</div>
+            ${note.answer ? `<div class="text-[11px] font-mono text-slate-500 truncate">Твой ответ: ${escapeHtml(note.answer)}</div>` : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    // ==================== VIEW 4: INTERACTIVE TOOLS ====================
+    // 0. Quadratic Equation Solver (8 класс: D, D/4, Vieta)
+    function fmtNum(n) {
+      if (!Number.isFinite(n)) return '—';
+      const rounded = Math.round(n * 10000) / 10000;
+      return String(Object.is(rounded, -0) ? 0 : rounded);
+    }
+
+    function calcQuadratic() {
+      const a = parseFloat(document.getElementById('quad-a').value);
+      const b = parseFloat(document.getElementById('quad-b').value);
+      const c = parseFloat(document.getElementById('quad-c').value);
+      const badge = document.getElementById('quad-roots-badge');
+      const d4Out = document.getElementById('quad-d4-out');
+      const dOut = document.getElementById('quad-d-out');
+      const vOut = document.getElementById('quad-vieta-out');
+
+      if (![a, b, c].every(Number.isFinite)) {
+        badge.textContent = 'Введите a, b, c';
+        d4Out.textContent = '—';
+        dOut.textContent = '—';
+        vOut.textContent = '—';
+        return;
+      }
+
+      if (a === 0) {
+        if (b === 0) {
+          badge.textContent = c === 0 ? 'x ∈ ℝ (бесконечно корней)' : 'Нет корней';
+        } else {
+          badge.textContent = `Линейное: x = ${fmtNum(-c / b)}`;
+        }
+        d4Out.textContent = 'При a = 0 уравнение не квадратное.';
+        dOut.textContent = 'Решается линейно: bx + c = 0.';
+        vOut.textContent = '—';
+        return;
+      }
+
+      const D = b * b - 4 * a * c;
+      const isEvenB = Number.isInteger(b) && b % 2 === 0;
+      const k = b / 2;
+      const D1 = k * k - a * c;
+
+      // D/4 output
+      if (isEvenB) {
+        if (D1 > 0) {
+          const s = Math.sqrt(D1);
+          const x1 = (-k + s) / a;
+          const x2 = (-k - s) / a;
+          d4Out.textContent = `b = ${b} чётное ⇒ k = ${fmtNum(k)}\nD₁ = (${fmtNum(k)})² − (${fmtNum(a)})·(${fmtNum(c)}) = ${fmtNum(D1)}\nx₁,₂ = (${fmtNum(-k)} ± ${fmtNum(s)}) / ${fmtNum(a)}\nx₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}`;
+        } else if (D1 === 0) {
+          d4Out.textContent = `b = ${b} чётное ⇒ k = ${fmtNum(k)}\nD₁ = 0 ⇒ один корень:\nx = −k / a = ${fmtNum(-k / a)}`;
+        } else {
+          d4Out.textContent = `b = ${b} чётное ⇒ k = ${fmtNum(k)}\nD₁ = ${fmtNum(D1)} < 0 ⇒ корней нет (в ℝ)`;
+        }
+      } else {
+        d4Out.textContent = `b = ${fmtNum(b)} нечётное (целое k = b/2 не выйдет).\nУдобнее считать обычным D, хотя формула тоже верна: D₁ = ${fmtNum(D1)}.`;
+      }
+
+      // Standard D output
+      if (D > 0) {
+        const s = Math.sqrt(D);
+        const x1 = (-b + s) / (2 * a);
+        const x2 = (-b - s) / (2 * a);
+        badge.textContent = `x₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}`;
+        dOut.textContent = `D = (${fmtNum(b)})² − 4·(${fmtNum(a)})·(${fmtNum(c)}) = ${fmtNum(D)}\n√D = ${fmtNum(s)}\nx₁,₂ = (${fmtNum(-b)} ± ${fmtNum(s)}) / ${fmtNum(2 * a)}`;
+      } else if (D === 0) {
+        const x = -b / (2 * a);
+        badge.textContent = `x = ${fmtNum(x)} (1 корень)`;
+        dOut.textContent = `D = 0 ⇒ x = −b / (2a) = ${fmtNum(x)}`;
+      } else {
+        badge.textContent = 'Нет действительных корней (D < 0)';
+        dOut.textContent = `D = ${fmtNum(D)} < 0 ⇒ действительных корней нет.`;
+      }
+
+      // Vieta & shortcut hacks
+      let hacks = [];
+      if (Math.abs(a + b + c) < 1e-9) {
+        hacks.push(`🔥 a + b + c = 0 ⇒ сразу x₁ = 1, x₂ = c/a = ${fmtNum(c / a)}!`);
+      } else if (Math.abs(a - b + c) < 1e-9) {
+        hacks.push(`🔥 a − b + c = 0 ⇒ сразу x₁ = −1, x₂ = −c/a = ${fmtNum(-c / a)}!`);
+      }
+      if (D >= 0) {
+        hacks.push(`x₁ + x₂ = −b/a = ${fmtNum(-b / a)}`);
+        hacks.push(`x₁ · x₂ = c/a = ${fmtNum(c / a)}`);
+      } else {
+        hacks.push('Для D < 0 действительных корней по Виета нет.');
+      }
+      vOut.textContent = hacks.join('\n');
+    }
+
+    // 1. Matrix 3x3
+    function calcMatrix() {
+      const cells = Array.from(document.querySelectorAll('.mat-cell')).map(el => {
+        const v = parseFloat(el.value);
+        return Number.isFinite(v) ? v : 0;
+      });
+      const [a, b, c, d, e, f, g, h, i] = cells;
+      const p1 = a * e * i, p2 = b * f * g, p3 = c * d * h;
+      const m1 = c * e * g, m2 = a * f * h, m3 = b * d * i;
+      const det = +(p1 + p2 + p3 - m1 - m2 - m3).toFixed(4);
+      const trace = +(a + e + i).toFixed(4);
+
+      document.getElementById('mat-det').textContent = det;
+      document.getElementById('mat-trace').textContent = trace;
+      document.getElementById('mat-invertible').textContent =
+        det !== 0 ? 'Невырожденная (обратная A⁻¹ существует)' : 'Вырожденная (обратной A⁻¹ нет)';
+      document.getElementById('mat-steps').textContent =
+        `det(A) = (${p1} + ${p2} + ${p3}) − (${m1} + ${m2} + ${m3}) = ${p1 + p2 + p3} − ${m1 + m2 + m3} = ${det}`;
+    }
+
+    // 2. Numeral Systems Converter
+    function calcBases() {
+      const raw = document.getElementById('base-input').value.trim().toUpperCase();
+      const fromBase = parseInt(document.getElementById('base-from').value, 10);
+      const customBase = parseInt(document.getElementById('base-custom').value, 10);
+      const errEl = document.getElementById('base-error');
+
+      if (!raw || isNaN(fromBase) || fromBase < 2 || fromBase > 36) {
+        errEl.textContent = 'Укажите число и основание от 2 до 36.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      const digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const validChars = digits.slice(0, fromBase);
+      const clean = raw.startsWith('-') ? raw.slice(1) : raw;
+      if (!clean || ![...clean].every(ch => validChars.includes(ch))) {
+        errEl.textContent = `Число «${raw}» содержит недопустимые цифры для системы с основанием ${fromBase}.`;
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      errEl.classList.add('hidden');
+      const dec = parseInt(raw, fromBase);
+      if (!Number.isSafeInteger(dec)) {
+        errEl.textContent = 'Число слишком большое для точного расчёта.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      document.getElementById('base-bin').textContent = dec.toString(2);
+      document.getElementById('base-oct').textContent = dec.toString(8);
+      document.getElementById('base-dec').textContent = dec.toString(10);
+      document.getElementById('base-hex').textContent = dec.toString(16).toUpperCase();
+
+      const targetBase = (isNaN(customBase) || customBase < 2 || customBase > 36) ? 10 : customBase;
+      const converted = dec.toString(targetBase).toUpperCase();
+      const digitSum = [...converted.replace('-', '')].reduce((acc, ch) => acc + digits.indexOf(ch), 0);
+      document.getElementById('base-custom-out').textContent = `${converted}₍${targetBase}₎  •  Сумма цифр = ${digitSum}`;
+    }
+
+    // 3. Function & Derivative Grapher
+    function compileExpr(raw) {
+      let expr = raw.trim();
+      if (!expr) throw new Error('Введите выражение');
+      // Allow friendly math shortcuts
+      expr = expr
+        .replace(/\^/g, '**')
+        .replace(/\b(sin|cos|tan|abs|sqrt|exp|pow)\b/g, 'Math.$1')
+        .replace(/\bln\b/g, 'Math.log')
+        .replace(/\bpi\b/gi, 'Math.PI')
+        .replace(/Math\.Math\./g, 'Math.');
+      // Basic safety check
+      if (/[^0-9xX+\-*/().,\sMathsincoabqrtepglPI]/.test(expr)) {
+        throw new Error('Используйте x, числа, + - * / ^, sin, cos, tan, ln, exp, sqrt, abs');
+      }
+      const fn = new Function('x', `return (${expr});`);
+      // Smoke test
+      fn(1);
+      return fn;
+    }
+
+    function drawGraph() {
+      const canvas = document.getElementById('graph-canvas');
+      if (!canvas) return;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const W = rect.width;
+      const H = rect.height;
+      const scale = Number(document.getElementById('graph-scale').value) || 48;
+      const cx = W / 2;
+      const cy = H / 2;
+      const isDark = document.documentElement.classList.contains('dark');
+
+      ctx.clearRect(0, 0, W, H);
+
+      // Grid
+      ctx.strokeStyle = isDark ? 'rgba(148,163,184,0.12)' : 'rgba(15,23,42,0.08)';
+      ctx.lineWidth = 1;
+      for (let x = cx % scale; x < W; x += scale) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      }
+      for (let y = cy % scale; y < H; y += scale) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      }
+
+      // Axes
+      ctx.strokeStyle = isDark ? 'rgba(148,163,184,0.45)' : 'rgba(15,23,42,0.35)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+
+      // Axis ticks
+      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+      ctx.font = '10px JetBrains Mono, monospace';
+      for (let i = -Math.floor(cx / scale); i <= Math.floor(cx / scale); i++) {
+        if (i === 0) continue;
+        const px = cx + i * scale;
+        ctx.fillText(String(i), px - 3, cy + 13);
+      }
+      for (let j = -Math.floor(cy / scale); j <= Math.floor(cy / scale); j++) {
+        if (j === 0) continue;
+        const py = cy - j * scale;
+        ctx.fillText(String(j), cx + 6, py + 3);
+      }
+
+      const errEl = document.getElementById('graph-error');
+      let fn;
+      try {
+        fn = compileExpr(document.getElementById('graph-expr').value);
+        errEl.classList.add('hidden');
+      } catch (e) {
+        errEl.textContent = e.message || 'Ошибка в формуле';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      const plotCurve = (evaluator, color, dashed = false) => {
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = dashed ? 2 : 2.5;
+        if (dashed) ctx.setLineDash([6, 5]);
+        ctx.beginPath();
+        let started = false;
+        let prevY = null;
+        for (let px = 0; px <= W; px += 1.5) {
+          const x = (px - cx) / scale;
+          let y;
+          try { y = evaluator(x); } catch { y = NaN; }
+          if (!Number.isFinite(y) || Math.abs(y) > 50) {
+            started = false;
+            prevY = null;
+            continue;
+          }
+          const py = cy - y * scale;
+          if (!started || (prevY !== null && Math.abs(py - prevY) > H * 0.6)) {
+            ctx.moveTo(px, py);
+            started = true;
+          } else {
+            ctx.lineTo(px, py);
+          }
+          prevY = py;
+        }
+        ctx.stroke();
+        ctx.restore();
+      };
+
+      if (document.getElementById('graph-show-deriv').checked) {
+        const h = 1e-4;
+        plotCurve(x => (fn(x + h) - fn(x - h)) / (2 * h), '#f59e0b', true);
+      }
+      plotCurve(fn, '#6366f1', false);
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    function initEvents() {
+      // Theme toggle
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        state.theme = state.theme === 'dark' ? 'light' : 'dark';
+        saveState();
+        applyTheme();
+      });
+
+      // Mode buttons
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => setMode(btn.dataset.mode));
+      });
+
+      // Top progress cards quick-filter
+      document.querySelectorAll('.track-stat-card').forEach(card => {
+        card.addEventListener('click', () => {
+          state.trackFilter = card.dataset.trackCard;
+          setMode('cheatsheet');
+          renderCheatsheet();
+        });
+      });
+
+      // Cheat sheet filters
+      document.querySelectorAll('.track-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.trackFilter = btn.dataset.filter;
+          renderCheatsheet();
+        });
+      });
+
+      document.getElementById('search-input').addEventListener('input', e => {
+        state.search = e.target.value;
+        renderCheatsheet();
+      });
+
+      document.getElementById('clear-search').addEventListener('click', () => {
+        state.search = '';
+        document.getElementById('search-input').value = '';
+        renderCheatsheet();
+      });
+
+      document.getElementById('filter-bookmarks').addEventListener('click', () => {
+        state.onlyBookmarks = !state.onlyBookmarks;
+        renderCheatsheet();
+      });
+
+      document.getElementById('filter-unstudied').addEventListener('click', () => {
+        state.onlyUnstudied = !state.onlyUnstudied;
+        renderCheatsheet();
+      });
+
+      document.getElementById('reset-filters-btn').addEventListener('click', () => {
+        state.trackFilter = 'all';
+        state.search = '';
+        state.onlyBookmarks = false;
+        state.onlyUnstudied = false;
+        document.getElementById('search-input').value = '';
+        renderCheatsheet();
+      });
+
+      // Delegated clicks inside cheatsheet grid
+      document.getElementById('cheatsheet-grid').addEventListener('click', e => {
+        const copyFormulaBtn = e.target.closest('[data-copy-formula]');
+        if (copyFormulaBtn) {
+          const [id, idx] = copyFormulaBtn.dataset.copyFormula.split(':');
+          const topic = TOPICS.find(t => t.id === id);
+          if (topic && topic.formulas[idx]) {
+            copyText(topic.formulas[idx].value, 'Формула скопирована');
+          }
+          return;
+        }
+        const copyCodeBtn = e.target.closest('[data-copy-code]');
+        if (copyCodeBtn) {
+          const topic = TOPICS.find(t => t.id === copyCodeBtn.dataset.copyCode);
+          if (topic && topic.code) copyText(topic.code, 'Код скопирован');
+          return;
+        }
+        const bmBtn = e.target.closest('[data-toggle-bookmark]');
+        if (bmBtn) {
+          const id = bmBtn.dataset.toggleBookmark;
+          if (state.bookmarks.includes(id)) {
+            state.bookmarks = state.bookmarks.filter(x => x !== id);
+            showToast('Убрано из избранного');
+          } else {
+            state.bookmarks.push(id);
+            showToast('Добавлено в избранное');
+          }
+          saveState();
+          renderCheatsheet();
+          return;
+        }
+        const stBtn = e.target.closest('[data-toggle-studied]');
+        if (stBtn) {
+          const id = stBtn.dataset.toggleStudied;
+          if (state.studied.includes(id)) {
+            state.studied = state.studied.filter(x => x !== id);
+          } else {
+            state.studied.push(id);
+            addXP(20);
+            showToast('Тема изучена! +20 XP');
+          }
+          saveState();
+          updateProgressBars();
+          renderCheatsheet();
+        }
+      });
+
+      // Flashcards controls
+      document.querySelectorAll('.fc-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.fcFilter = btn.dataset.fcFilter;
+          state.fcIndex = 0;
+          state.fcFlipped = false;
+          renderFlashcards();
+        });
+      });
+
+      const flipCard = () => {
+        state.fcFlipped = !state.fcFlipped;
+        renderFlashcards();
+      };
+      document.getElementById('fc-card-wrapper').addEventListener('click', flipCard);
+      document.getElementById('fc-card-wrapper').addEventListener('keydown', e => {
+        if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); flipCard(); }
+      });
+
+      document.getElementById('fc-prev').addEventListener('click', () => {
+        state.fcIndex--;
+        state.fcFlipped = false;
+        renderFlashcards();
+      });
+      document.getElementById('fc-next').addEventListener('click', () => {
+        state.fcIndex++;
+        state.fcFlipped = false;
+        renderFlashcards();
+      });
+      document.getElementById('fc-shuffle').addEventListener('click', () => {
+        state.fcOrder = [...state.fcOrder].sort(() => Math.random() - 0.5);
+        state.fcIndex = 0;
+        state.fcFlipped = false;
+        renderFlashcards();
+        showToast('Карточки перемешаны');
+      });
+      document.getElementById('fc-know').addEventListener('click', () => {
+        const list = getFilteredFlashcards();
+        const card = list[state.fcIndex];
+        if (card && !state.fcKnown.includes(card.id)) {
+          state.fcKnown.push(card.id);
+          addXP(10);
+          showToast('Отмечено «Знаю»! +10 XP');
+        }
+        state.fcIndex++;
+        state.fcFlipped = false;
+        renderFlashcards();
+      });
+      document.getElementById('fc-again').addEventListener('click', () => {
+        const list = getFilteredFlashcards();
+        const card = list[state.fcIndex];
+        if (card) {
+          state.fcKnown = state.fcKnown.filter(id => id !== card.id);
+          saveState();
+        }
+        state.fcIndex++;
+        state.fcFlipped = false;
+        renderFlashcards();
+      });
+
+      // Keyboard navigation for flashcards
+      window.addEventListener('keydown', e => {
+        if (state.mode !== 'flashcards') return;
+        if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+        if (e.code === 'Space') { e.preventDefault(); flipCard(); }
+        if (e.code === 'ArrowRight') { state.fcIndex++; state.fcFlipped = false; renderFlashcards(); }
+        if (e.code === 'ArrowLeft') { state.fcIndex--; state.fcFlipped = false; renderFlashcards(); }
+      });
+
+      // Quiz controls
+      document.querySelectorAll('.quiz-track-btn').forEach(btn => {
+        btn.addEventListener('click', () => startQuiz(btn.dataset.quizTrack));
+      });
+      document.getElementById('quiz-options').addEventListener('click', e => {
+        const btn = e.target.closest('[data-quiz-opt]');
+        if (btn) handleQuizAnswer(Number(btn.dataset.quizOpt));
+      });
+      document.getElementById('quiz-next-btn').addEventListener('click', () => {
+        if (state.quizIdx < state.quizQuestions.length - 1) {
+          state.quizIdx++;
+          state.quizAnswered = false;
+          renderQuiz();
+        } else {
+          showQuizResult();
+        }
+      });
+      document.getElementById('quiz-restart-inline').addEventListener('click', () => startQuiz(state.quizTrack));
+      document.getElementById('quiz-retry-btn').addEventListener('click', () => startQuiz(state.quizTrack));
+      document.getElementById('quiz-retry-mistakes-btn').addEventListener('click', () => {
+        if (state.quizMistakes.length) startQuiz(state.quizTrack, [...state.quizMistakes]);
+      });
+
+      // Written Practice Controls
+      ['wr-steps', 'wr-answer', 'wr-explain'].forEach(id => {
+        document.getElementById(id).addEventListener('focus', e => {
+          lastFocusedWrField = e.target;
+        });
+      });
+
+      document.getElementById('wr-symbols').addEventListener('click', e => {
+        const btn = e.target.closest('[data-sym]');
+        if (!btn) return;
+        const sym = btn.dataset.sym;
+        const field = lastFocusedWrField || document.getElementById('wr-steps');
+        const start = field.selectionStart ?? field.value.length;
+        const end = field.selectionEnd ?? field.value.length;
+        field.value = field.value.slice(0, start) + sym + field.value.slice(end);
+        field.focus();
+        const pos = start + sym.length;
+        try { field.setSelectionRange(pos, pos); } catch (err) {}
+      });
+
+      document.querySelectorAll('.wr-track-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.wrTrack = btn.dataset.wrTrack;
+          state.wrIndex = 0;
+          renderWritten();
+        });
+      });
+      document.getElementById('wr-prev').addEventListener('click', () => {
+        state.wrIndex--;
+        renderWritten();
+      });
+      document.getElementById('wr-next').addEventListener('click', () => {
+        state.wrIndex++;
+        renderWritten();
+      });
+      document.getElementById('wr-hint-btn').addEventListener('click', () => {
+        document.getElementById('wr-hint-box').classList.toggle('hidden');
+      });
+      document.getElementById('wr-check-btn').addEventListener('click', checkCurrentWritten);
+      document.getElementById('wr-save-btn').addEventListener('click', () => saveCurrentWrittenNote(false));
+      document.getElementById('wr-clear-btn').addEventListener('click', () => {
+        document.getElementById('wr-steps').value = '';
+        document.getElementById('wr-answer').value = '';
+        document.getElementById('wr-explain').value = '';
+        document.getElementById('wr-result-box').classList.add('hidden');
+      });
+      document.getElementById('wr-mark-done').addEventListener('click', () => {
+        const list = getFilteredWrittenTasks();
+        const task = list[state.wrIndex];
+        if (!task) return;
+        saveCurrentWrittenNote(true);
+        if (!state.wrSolved.includes(task.id)) {
+          state.wrSolved.push(task.id);
+          addXP(25);
+          showToast('Задача зачтена в тетради! +25 XP');
+        } else {
+          showToast('Уже отмечена как решённая');
+        }
+        saveState();
+        document.getElementById('wr-solved-pill').classList.remove('hidden');
+        renderNotebookList();
+      });
+      document.getElementById('wr-notebook-list').addEventListener('click', e => {
+        const btn = e.target.closest('[data-open-note]');
+        if (!btn) return;
+        const id = btn.dataset.openNote;
+        state.wrTrack = 'all';
+        const idx = WRITTEN_TASKS.findIndex(t => t.id === id);
+        if (idx >= 0) {
+          state.wrIndex = idx;
+          renderWritten();
+        }
+      });
+
+      // Tools: Quadratic Solver
+      ['quad-a', 'quad-b', 'quad-c'].forEach(id => {
+        document.getElementById(id).addEventListener('input', calcQuadratic);
+      });
+      document.querySelectorAll('.quad-preset').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [a, b, c] = btn.dataset.quad.split(',');
+          document.getElementById('quad-a').value = a;
+          document.getElementById('quad-b').value = b;
+          document.getElementById('quad-c').value = c;
+          calcQuadratic();
+        });
+      });
+
+      // Tools: Matrix
+      document.querySelectorAll('.mat-cell').forEach(inp => inp.addEventListener('input', calcMatrix));
+      document.getElementById('mat-random').addEventListener('click', () => {
+        document.querySelectorAll('.mat-cell').forEach(inp => {
+          inp.value = Math.floor(Math.random() * 11) - 5;
+        });
+        calcMatrix();
+      });
+      document.getElementById('mat-identity').addEventListener('click', () => {
+        const vals = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+        document.querySelectorAll('.mat-cell').forEach((inp, idx) => { inp.value = vals[idx]; });
+        calcMatrix();
+      });
+
+      // Tools: Bases
+      ['base-input', 'base-from', 'base-custom'].forEach(id => {
+        document.getElementById(id).addEventListener('input', calcBases);
+      });
+
+      // Tools: Grapher
+      document.getElementById('graph-expr').addEventListener('input', drawGraph);
+      document.getElementById('graph-show-deriv').addEventListener('change', drawGraph);
+      document.getElementById('graph-scale').addEventListener('input', drawGraph);
+      document.querySelectorAll('.graph-preset').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('graph-expr').value = btn.dataset.preset;
+          drawGraph();
+        });
+      });
+      window.addEventListener('resize', () => {
+        if (state.mode === 'tools') drawGraph();
+      });
+    }
+
+    // ==================== INIT ====================
+    loadState();
+    initEvents();
+    applyTheme();
+    updateProgressBars();
+    setMode('cheatsheet');
+    renderCheatsheet();
+    renderFlashcards();
+    startQuiz('all');
+    renderWritten();
+    calcQuadratic();
+    calcMatrix();
+    calcBases();
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
